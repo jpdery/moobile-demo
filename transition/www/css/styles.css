@@ -1,0 +1,5 @@
+.view.view-one > .view-content,
+.view.view-two > .view-content {
+	-webkit-box-pack: center;
+	padding: 12px;
+}

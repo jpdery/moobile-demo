@@ -111,7 +111,7 @@ var m = Math,
 
 		// User defined options
 		for (i in options) that.options[i] = options[i];
-
+		
 		// Set starting position
 		that.x = that.options.x;
 		that.y = that.options.y;
@@ -124,19 +124,19 @@ var m = Math,
 		that.options.useTransition = hasTransitionEnd && that.options.useTransition;
 
 		// Helpers FIX ANDROID BUG!
-		// translate3d and scale doesn't work together!
+		// translate3d and scale doesn't work together! 
 		// Ignoring 3d ONLY WHEN YOU SET that.options.zoom
 		if ( that.options.zoom && isAndroid ){
 			trnOpen = 'translate(';
 			trnClose = ')';
 		}
-
+		
 		// Set some default styles
 		that.scroller.style[vendor + 'TransitionProperty'] = that.options.useTransform ? '-' + vendor.toLowerCase() + '-transform' : 'top left';
 		that.scroller.style[vendor + 'TransitionDuration'] = '0';
 		that.scroller.style[vendor + 'TransformOrigin'] = '0 0';
 		if (that.options.useTransition) that.scroller.style[vendor + 'TransitionTimingFunction'] = 'cubic-bezier(0.33,0.66,0.66,1)';
-
+		
 		if (that.options.useTransform) that.scroller.style[vendor + 'Transform'] = trnOpen + that.x + 'px,' + that.y + 'px' + trnClose;
 		else that.scroller.style.cssText += ';position:absolute;top:' + that.y + 'px;left:' + that.x + 'px';
 
@@ -168,7 +168,7 @@ iScroll.prototype = {
 	pagesX: [], pagesY: [],
 	aniTime: null,
 	wheelZoomCount: 0,
-
+	
 	handleEvent: function (e) {
 		var that = this;
 		switch(e.type) {
@@ -185,14 +185,14 @@ iScroll.prototype = {
 			case 'webkitTransitionEnd': that._transitionEnd(e); break;
 		}
 	},
-
+	
 	_checkDOMChanges: function () {
 		if (this.moved || this.zoomed || this.animating ||
 			(this.scrollerW == this.scroller.offsetWidth * this.scale && this.scrollerH == this.scroller.offsetHeight * this.scale)) return;
 
 		this.refresh();
 	},
-
+	
 	_scrollbar: function (dir) {
 		var that = this,
 			doc = document,
@@ -250,12 +250,12 @@ iScroll.prototype = {
 		// Reset position
 		that._scrollbarPos(dir, true);
 	},
-
+	
 	_resize: function () {
 		var that = this;
 		setTimeout(function () { that.refresh(); }, isAndroid ? 200 : 0);
 	},
-
+	
 	_pos: function (x, y) {
 		x = this.hScroll ? x : 0;
 		y = this.vScroll ? y : 0;
@@ -307,7 +307,7 @@ iScroll.prototype = {
 		that[dir + 'ScrollbarWrapper'].style.opacity = hidden && that.options.hideScrollbar ? '0' : '1';
 		that[dir + 'ScrollbarIndicator'].style[vendor + 'Transform'] = trnOpen + (dir == 'h' ? pos + 'px,0' : '0,' + pos + 'px') + trnClose;
 	},
-
+	
 	_start: function (e) {
 		var that = this,
 			point = hasTouch ? e.touches[0] : e,
@@ -352,7 +352,7 @@ iScroll.prototype = {
 				x = getComputedStyle(that.scroller, null).left.replace(/[^0-9-]/g, '') * 1;
 				y = getComputedStyle(that.scroller, null).top.replace(/[^0-9-]/g, '') * 1;
 			}
-
+			
 			if (x != that.x || y != that.y) {
 				if (that.options.useTransition) that._unbind('webkitTransitionEnd');
 				else cancelFrame(that.aniTime);
@@ -377,7 +377,7 @@ iScroll.prototype = {
 		that._bind(END_EV);
 		that._bind(CANCEL_EV);
 	},
-
+	
 	_move: function (e) {
 		var that = this,
 			point = hasTouch ? e.touches[0] : e,
@@ -421,7 +421,7 @@ iScroll.prototype = {
 		if (newX > 0 || newX < that.maxScrollX) {
 			newX = that.options.bounce ? that.x + (deltaX / 2) : newX >= 0 || that.maxScrollX >= 0 ? 0 : that.maxScrollX;
 		}
-		if (newY > that.minScrollY || newY < that.maxScrollY) {
+		if (newY > that.minScrollY || newY < that.maxScrollY) { 
 			newY = that.options.bounce ? that.y + (deltaY / 2) : newY >= that.minScrollY || that.maxScrollY >= 0 ? that.minScrollY : that.maxScrollY;
 		}
 
@@ -455,10 +455,10 @@ iScroll.prototype = {
 			that.startX = that.x;
 			that.startY = that.y;
 		}
-
+		
 		if (that.options.onScrollMove) that.options.onScrollMove.call(that, e);
 	},
-
+	
 	_end: function (e) {
 		if (hasTouch && e.touches.length != 0) return;
 
@@ -490,10 +490,10 @@ iScroll.prototype = {
 
 			that.x = that.originX - that.originX * that.lastScale + that.x;
 			that.y = that.originY - that.originY * that.lastScale + that.y;
-
+			
 			that.scroller.style[vendor + 'TransitionDuration'] = '200ms';
 			that.scroller.style[vendor + 'Transform'] = trnOpen + that.x + 'px,' + that.y + 'px' + trnClose + ' scale(' + that.scale + ')';
-
+			
 			that.zoomed = false;
 			that.refresh();
 
@@ -591,7 +591,7 @@ iScroll.prototype = {
 		that._resetPos(200);
 		if (that.options.onTouchEnd) that.options.onTouchEnd.call(that, e);
 	},
-
+	
 	_resetPos: function (time) {
 		var that = this,
 			resetX = that.x >= 0 ? 0 : that.x < that.maxScrollX ? that.maxScrollX : that.x,
@@ -632,27 +632,27 @@ iScroll.prototype = {
 		} else {
 			wheelDeltaX = wheelDeltaY = -e.wheelDelta;
 		}
-
+		
 		if (that.options.wheelAction == 'zoom') {
 			deltaScale = that.scale * Math.pow(2, 1/3 * (wheelDeltaY ? wheelDeltaY / Math.abs(wheelDeltaY) : 0));
 			if (deltaScale < that.options.zoomMin) deltaScale = that.options.zoomMin;
 			if (deltaScale > that.options.zoomMax) deltaScale = that.options.zoomMax;
-
+			
 			if (deltaScale != that.scale) {
 				if (!that.wheelZoomCount && that.options.onZoomStart) that.options.onZoomStart.call(that, e);
 				that.wheelZoomCount++;
-
+				
 				that.zoom(e.pageX, e.pageY, deltaScale, 400);
-
+				
 				setTimeout(function() {
 					that.wheelZoomCount--;
 					if (!that.wheelZoomCount && that.options.onZoomEnd) that.options.onZoomEnd.call(that, e);
 				}, 400);
 			}
-
+			
 			return;
 		}
-
+		
 		deltaX = that.x + wheelDeltaX;
 		deltaY = that.y + wheelDeltaY;
 
@@ -664,7 +664,7 @@ iScroll.prototype = {
 
 		that.scrollTo(deltaX, deltaY, 0);
 	},
-
+	
 	_mouseout: function (e) {
 		var t = e.relatedTarget;
 
@@ -674,7 +674,7 @@ iScroll.prototype = {
 		}
 
 		while (t = t.parentNode) if (t == this.wrapper) return;
-
+		
 		this._end(e);
 	},
 
@@ -684,7 +684,7 @@ iScroll.prototype = {
 		if (e.target != that.scroller) return;
 
 		that._unbind('webkitTransitionEnd');
-
+		
 		that._startAni();
 	},
 
@@ -702,19 +702,19 @@ iScroll.prototype = {
 			animate;
 
 		if (that.animating) return;
-
+		
 		if (!that.steps.length) {
 			that._resetPos(400);
 			return;
 		}
-
+		
 		step = that.steps.shift();
-
+		
 		if (step.x == startX && step.y == startY) step.time = 0;
 
 		that.animating = true;
 		that.moved = true;
-
+		
 		if (that.options.useTransition) {
 			that._transitionTime(step.time);
 			that._pos(step.x, step.y);
@@ -760,7 +760,7 @@ iScroll.prototype = {
 			newDist = (speed * speed) / (2 * deceleration),
 			newTime = 0, outsideDist = 0;
 
-		// Proportinally reduce speed if we are outside of the boundaries
+		// Proportinally reduce speed if we are outside of the boundaries 
 		if (dist > 0 && newDist > maxDistUpper) {
 			outsideDist = size / (6 / (newDist / speed * deceleration));
 			maxDistUpper = maxDistUpper + outsideDist;
@@ -782,12 +782,12 @@ iScroll.prototype = {
 	_offset: function (el) {
 		var left = -el.offsetLeft,
 			top = -el.offsetTop;
-
+			
 		while (el = el.offsetParent) {
 			left -= el.offsetLeft;
 			top -= el.offsetTop;
 		}
-
+		
 		if (el != this.wrapper) {
 			left *= this.scale;
 			top *= this.scale;
@@ -867,16 +867,16 @@ iScroll.prototype = {
 		that._unbind(MOVE_EV);
 		that._unbind(END_EV);
 		that._unbind(CANCEL_EV);
-
+		
 		if (!that.options.hasTouch) {
 			that._unbind('mouseout', that.wrapper);
 			that._unbind(WHEEL_EV);
 		}
-
+		
 		if (that.options.useTransition) that._unbind('webkitTransitionEnd');
-
+		
 		if (that.options.checkDOMChanges) clearInterval(that.checkDOMTime);
-
+		
 		if (that.options.onDestroy) that.options.onDestroy.call(that);
 	},
 
@@ -962,7 +962,7 @@ iScroll.prototype = {
 		that.stop();
 
 		if (!step.length) step = [{ x: x, y: y, time: time, relative: relative }];
-
+		
 		for (i=0, l=step.length; i<l; i++) {
 			if (step[i].relative) { step[i].x = that.x - step[i].x; step[i].y = that.y - step[i].y; }
 			that.steps.push({ x: step[i].x, y: step[i].y, time: step[i].time || 0 });
@@ -989,7 +989,7 @@ iScroll.prototype = {
 
 	scrollToPage: function (pageX, pageY, time) {
 		var that = this, x, y;
-
+		
 		time = time === undefined ? 400 : time;
 
 		if (that.options.onScrollStart) that.options.onScrollStart.call(that);
@@ -1025,11 +1025,11 @@ iScroll.prototype = {
 		this._unbind(END_EV);
 		this._unbind(CANCEL_EV);
 	},
-
+	
 	enable: function () {
 		this.enabled = true;
 	},
-
+	
 	stop: function () {
 		if (this.options.useTransition) this._unbind('webkitTransitionEnd');
 		else cancelFrame(this.aniTime);
@@ -1037,7 +1037,7 @@ iScroll.prototype = {
 		this.moved = false;
 		this.animating = false;
 	},
-
+	
 	zoom: function (x, y, scale, time) {
 		var that = this,
 			relScale = scale / that.scale;
@@ -1061,7 +1061,7 @@ iScroll.prototype = {
 		that.scroller.style[vendor + 'Transform'] = trnOpen + that.x + 'px,' + that.y + 'px' + trnClose + ' scale(' + scale + ')';
 		that.zoomed = false;
 	},
-
+	
 	isReady: function () {
 		return !this.moved && !this.zoomed && !this.animating;
 	}
@@ -1996,7 +1996,7 @@ Browser.Device = {
 
 if (Browser.Platform.ios){
 	var device = navigator.userAgent.toLowerCase().match(/(ip(ad|od|hone))/)[0];
-
+	
 	Browser.Device[device] = true;
 	Browser.Device.name = device;
 }
@@ -2032,7 +2032,7 @@ Browser.Features.Touch = (function(){
 		document.createEvent('TouchEvent').initTouchEvent('touchstart');
 		return true;
 	} catch (exception){}
-
+	
 	return false;
 })();
 
@@ -2596,9 +2596,11 @@ Moobile.Component = new Class({
 	 */
 	addEvent: function(type, fn, internal) {
 
-		if (Moobile.Component.hasNativeEvent(type))
+		var name = type.split(':')[0];
+
+		if (Moobile.Component.hasNativeEvent(name))
 			this.element.addEvent(type, function(e) {
-				this.fireEvent(type, e);
+				this.fireEvent(name, e);
 			}.bind(this), internal);
 
 		return this.parent(type, fn, internal);
@@ -2843,10 +2845,6 @@ Moobile.Component = new Class({
 
 		this.willRemoveChildComponent(component);
 
-		component.setParentComponent(null);
-		component.setWindow(null);
-		component.setReady(false);
-
 		var element = component.getElement();
 		if (element) {
 			element.dispose();
@@ -2854,11 +2852,14 @@ Moobile.Component = new Class({
 
 		this._children.erase(component);
 
+		component.setParentComponent(null);
+		component.setWindow(null);
+		component.setReady(false);
+
 		this.didRemoveChildComponent(component);
 
 		if (destroy) {
 			component.destroy();
-			component = null;
 		}
 
 		return this;
@@ -2882,7 +2883,7 @@ Moobile.Component = new Class({
 
 		this._children.filter(function(child) {
 			return child instanceof type;
-		}).invoke('removeFromParent', destroy);
+		}).invoke('removeFromParentComponent', destroy);
 
 		return this;
 	},
@@ -2943,7 +2944,9 @@ Moobile.Component = new Class({
 		if (this._window === window)
 			return this;
 
+		this.windowWillChange(window);
 		this._window = window;
+		this.windowDidChange(window);
 
 		this._children.invoke('setWindow', window);
 
@@ -3249,6 +3252,24 @@ Moobile.Component = new Class({
 	},
 
 	/**
+	 * @see    http://moobilejs.com/doc/0.1/Component/Component#windowWillChange
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2
+	 */
+	windowWillChange: function(window) {
+
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/0.1/Component/Component#windowDidChange
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2
+	 */
+	windowDidChange: function(window) {
+
+	},
+
+	/**
 	 * @see    http://moobilejs.com/doc/0.1/Component/Component#willShow
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1
@@ -3290,15 +3311,12 @@ Moobile.Component = new Class({
 	 * @since  0.1
 	 */
 	destroy: function() {
-
-		this.removeFromParentComponent();
 		this.removeAllChildComponents(true);
-
+		this.removeFromParentComponent();
 		this.element.destroy();
 		this.element = null;
 		this._window = null;
 		this._parent = null;
-
 		return this;
 	},
 
@@ -6457,7 +6475,8 @@ provides:
 
 	// simulator hook
 	window.addEvent('ready', function() {
-		if (parent) {
+		if (parent &&
+			parent.fireEvent) {
 			parent.fireEvent('appready');
 		}
 	});
@@ -7177,7 +7196,7 @@ Moobile.Scroller = new Class({
 	 */
 	_onDragStart: function() {
 		this._startScroll = this.getScroll();
-		this._startPage = this.getPage();
+		this._startPage = Object.clone(this.getPage());
 		this._startTime = Date.now();
 		this.fireEvent('dragstart');
 	},
@@ -7224,10 +7243,10 @@ window.addEvent('domready', function(e) {
 
 	document.addEvent('touchmove', function(e) {
 
-		if (e.target.getParent('.scroll') === null) {
+		if (!e.target.hasClass('scroll') &&
+			!e.target.getParent('.scroll')) {
 			e.preventDefault();
 		} else {
-
 			//
 			// TODO
 			// This part has to be improved, right now only a pure horizontal
@@ -7441,7 +7460,7 @@ iScroll.prototype._checkDOMChanges = function() {
 
 	_checkDOMChanges.call(this);
 
-	var size = this.wrapper.getSize();
+	var size = this.wrapper.getScrollSize();
 	if (this._currentSize.x != size.x || this._currentSize.y != size.y) {
 		this._currentSize = size;
 		this.refresh();
@@ -7491,7 +7510,10 @@ Moobile.Scroller.Engine.IScroll = new Class({
 			checkDOMChanges: true,
 			snap: false,
 			onScrollMove: this.bound('_onScrollMove'),
-			onScrollEnd: this.bound('_onScrollEnd')
+			onScrollEnd: this.bound('_onScrollEnd'),
+			onBeforeScrollStart: function (e) {
+				e.preventDefault(); // This fixes an Android issue where the content would not scroll
+			}
 		};
 
 		this.scroller = new iScroll(this.wrapperElement, options);
@@ -7521,7 +7543,8 @@ Moobile.Scroller.Engine.IScroll = new Class({
 	 * @since  0.1.0
 	 */
 	scrollTo: function(x, y, time) {
-		(function() { this.scroller.scrollTo(-x, -y, time); }).delay(5, this);
+		this.scroller.refresh();
+		this.scroller.scrollTo(-x, -y, time);
 		return this;
 	},
 
@@ -7841,7 +7864,7 @@ Moobile.Scroller.Engine.Native = new Class({
 });
 
 Moobile.Scroller.Engine.Native.supportsCurrentPlatform = function() {
-	return 'WebkitOverflowScrolling' in new Element('div').style;
+	return Browser.Platform.ios && 'WebkitOverflowScrolling' in new Element('div').style;
 };
 
 
@@ -8384,6 +8407,7 @@ Moobile.ScrollView = new Class({
 	 * @since  0.1
 	 */
 	options: {
+		engine: ['Native', 'IScroll'],
 		momentum: true,
 		scrollX: false,
 		scrollY: true,
@@ -8417,6 +8441,7 @@ Moobile.ScrollView = new Class({
 		this.parent();
 
 		var options = {
+			engine: this.options.engine,
 			momentum: this.options.momentum,
 			scrollX: this.options.scrollX,
 			scrollY: this.options.scrollY,
@@ -8544,7 +8569,7 @@ Moobile.ScrollView = new Class({
 		this.parent();
 		var offset = this.options.offset;
 		if (offset.x >= 0 || offset.y >= 0) {
-		//	this._scroller.scrollTo(offset.x, offset.y);
+			this._scroller.scrollTo(offset.x, offset.y);
 		}
 	},
 
@@ -9575,8 +9600,9 @@ Moobile.ViewController = new Class({
 
 		window.removeEvent('rotate', this.bound('_onWindowRotate'));
 
-		this.removeFromParentViewController();
 		this.removeAllChildViewControllers(true);
+
+		this.removeFromParentViewController();
 
 		if (this._modalViewController) {
 			this._modalViewController.destroy();
@@ -10340,12 +10366,10 @@ Moobile.ViewTransition = new Class({
 	 */
 	enter: function(viewToShow, viewToHide, parentView, isFirstView) {
 
+		viewToShow.disableTouch();
 		if (viewToHide) {
 			viewToHide.disableTouch();
 		}
-
-		viewToShow.show();
-		viewToShow.disableTouch();
 
 		this.fireEvent('start');
 
@@ -10354,6 +10378,8 @@ Moobile.ViewTransition = new Class({
 		} else {
 			this.enterAnimation(viewToShow, viewToHide, parentView);
 		}
+
+		viewToShow.show();
 
 		return this;
 	},
@@ -10365,12 +10391,13 @@ Moobile.ViewTransition = new Class({
 	 */
 	leave: function(viewToShow, viewToHide, parentView) {
 
-		viewToShow.show();
 		viewToShow.disableTouch();
 		viewToHide.disableTouch();
 
 		this.fireEvent('start');
 		this.leaveAnimation(viewToShow, viewToHide, parentView);
+
+		viewToShow.show();
 
 		return this;
 	},
@@ -10769,8 +10796,8 @@ Moobile.ViewTransition.Cover.Box = new Class({
 			e.stop();
 
 			parentElem.removeClass('transition-cover-box-leave');
-			viewToHide.removeClass('transition-cover-box-background-view');
-			viewToShow.removeClass('transition-cover-box-foreground-view');
+			viewToHide.removeClass('transition-cover-box-foreground-view');
+			viewToShow.removeClass('transition-cover-box-background-view');
 			viewToHide.removeClass('transition-view-to-hide');
 			viewToShow.removeClass('transition-view-to-show');
 
@@ -11539,11 +11566,6 @@ provides: Touch
 
 (function(){
 
-var preventDefault = function(event){
-	if (!event.target || event.target.tagName.toLowerCase() != 'select')
-		event.preventDefault();
-};
-
 var disabled;
 
 Element.defineCustomEvent('touch', {
@@ -11551,7 +11573,7 @@ Element.defineCustomEvent('touch', {
 	base: 'touchend',
 
 	condition: function(event){
-		if (disabled || event.targetTouches.length != 0) return false;
+		if (disabled || event.targetTouches.length !== 0) return false;
 
 		var touch = event.changedTouches[0],
 			target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -11561,14 +11583,6 @@ Element.defineCustomEvent('touch', {
 		} while (target && (target = target.parentNode));
 
 		return false;
-	},
-
-	onSetup: function(){
-		this.addEvent('touchstart', preventDefault);
-	},
-
-	onTeardown: function(){
-		this.removeEvent('touchstart', preventDefault);
 	},
 
 	onEnable: function(){
@@ -11724,17 +11738,17 @@ var events = {
 		active = true;
 		start = {x: touch.pageX, y: touch.pageY};
 	},
-
+	
 	touchmove: function(event){
 		if (disabled || !active) return;
-
+		
 		var touch = event.changedTouches[0],
 			end = {x: touch.pageX, y: touch.pageY};
 		if (this.retrieve(cancelKey) && Math.abs(start.y - end.y) > 10){
 			active = false;
 			return;
 		}
-
+		
 		var distance = this.retrieve(distanceKey, dflt),
 			delta = end.x - start.x,
 			isLeftSwipe = delta < -distance,
@@ -11742,13 +11756,13 @@ var events = {
 
 		if (!isRightSwipe && !isLeftSwipe)
 			return;
-
+		
 		event.preventDefault();
 		active = false;
 		event.direction = (isLeftSwipe ? 'left' : 'right');
 		event.start = start;
 		event.end = end;
-
+		
 		this.fireEvent(name, event);
 	},
 
@@ -11816,7 +11830,7 @@ var events = {
 			clear();
 			return;
 		}
-
+		
 		timer = (function(){
 			this.fireEvent(name, event);
 		}).delay(this.retrieve(delayKey) || 750, this);
@@ -11875,7 +11889,7 @@ Class.Instantiate = function(klass, options){
 		if (object.getInstanceOf && object.getInstanceOf(klass)) return;
 		new klass(object, options);
 	};
-
+	
 	return function(objects){
 		objects.each(create);
 	};
@@ -11924,7 +11938,7 @@ Class.Singleton.prototype.check = function(item){
 
 	var instance = item.retrieve('single:' + this.$className);
 	if (!instance) item.store('single:' + this.$className, this);
-
+	
 	return instance;
 };
 

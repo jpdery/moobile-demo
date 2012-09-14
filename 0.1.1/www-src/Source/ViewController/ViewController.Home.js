@@ -24,22 +24,54 @@ ViewController.Home = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	transitionList: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	controlList: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	alertButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	tapButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	pinchButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	swipeButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/home-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 
 		this.transitionList = this.view.getChildComponent('transition-list');
@@ -60,11 +92,19 @@ ViewController.Home = new Class({
 		this.swipeButton.addEvent('swipe', this.bound('onSwipeButtonSwipe'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidEnter: function() {
 		this.transitionList.clearSelectedItem();
 		this.controlList.clearSelectedItem();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 		this.transitionList.removeEvent('select', this.bound('onTransitionItemSelect'));
 		this.transitionList = null;
@@ -86,6 +126,10 @@ ViewController.Home = new Class({
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onTransitionItemSelect: function(item) {
 
 		var viewTransition = null;
@@ -114,6 +158,10 @@ ViewController.Home = new Class({
 		if (viewTransition) this.getViewControllerStack().pushViewController(new ViewController.Transition, viewTransition);
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onControlItemSelect: function(item) {
 
 		var viewController = null;
@@ -136,6 +184,10 @@ ViewController.Home = new Class({
 		if (viewController) this.getViewControllerStack().pushViewController(viewController, new Moobile.ViewTransition.Slide);
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onAlertButtonTap: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -144,6 +196,10 @@ ViewController.Home = new Class({
 		alert.showAnimated();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onTapButtonTap: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -151,6 +207,10 @@ ViewController.Home = new Class({
 		alert.showAnimated();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onPinchButtonPinch: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -158,6 +218,10 @@ ViewController.Home = new Class({
 		alert.showAnimated();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onSwipeButtonSwipe: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);

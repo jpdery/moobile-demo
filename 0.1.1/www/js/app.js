@@ -24,22 +24,54 @@ ViewController.Home = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	transitionList: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	controlList: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	alertButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	tapButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	pinchButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	swipeButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/home-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 
 		this.transitionList = this.view.getChildComponent('transition-list');
@@ -60,11 +92,19 @@ ViewController.Home = new Class({
 		this.swipeButton.addEvent('swipe', this.bound('onSwipeButtonSwipe'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidEnter: function() {
 		this.transitionList.clearSelectedItem();
 		this.controlList.clearSelectedItem();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 		this.transitionList.removeEvent('select', this.bound('onTransitionItemSelect'));
 		this.transitionList = null;
@@ -86,6 +126,10 @@ ViewController.Home = new Class({
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onTransitionItemSelect: function(item) {
 
 		var viewTransition = null;
@@ -114,6 +158,10 @@ ViewController.Home = new Class({
 		if (viewTransition) this.getViewControllerStack().pushViewController(new ViewController.Transition, viewTransition);
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onControlItemSelect: function(item) {
 
 		var viewController = null;
@@ -136,6 +184,10 @@ ViewController.Home = new Class({
 		if (viewController) this.getViewControllerStack().pushViewController(viewController, new Moobile.ViewTransition.Slide);
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onAlertButtonTap: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -144,6 +196,10 @@ ViewController.Home = new Class({
 		alert.showAnimated();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onTapButtonTap: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -151,6 +207,10 @@ ViewController.Home = new Class({
 		alert.showAnimated();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onPinchButtonPinch: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -158,6 +218,10 @@ ViewController.Home = new Class({
 		alert.showAnimated();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onSwipeButtonSwipe: function() {
 		var alert = new Moobile.Alert();
 		this.view.getWindow().addChildComponent(alert);
@@ -193,23 +257,43 @@ ViewController.Transition = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	backButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/transition-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 		this.backButton = this.view.getChildComponent('back-button');
 		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 		this.backButton.removeEvent('tap', this.bound('onBackButtonTap'));
 		this.backButton = null;
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onBackButtonTap: function() {
 		this.getViewControllerStack().popViewController();
 	}
@@ -242,20 +326,48 @@ ViewController.Button = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBar: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBarItem: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	backButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	tempButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	styleList: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/control-button-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 
 		this.navigationBar = this.view.getChildComponent('navigation-bar');
@@ -269,6 +381,10 @@ ViewController.Button = new Class({
 		this.styleList.addEvent('select', this.bound('onStyleListSelect'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 
 		this.navigationBar = null;
@@ -284,10 +400,18 @@ ViewController.Button = new Class({
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onBackButtonTap: function() {
 		this.getViewControllerStack().popViewController();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onStyleListSelect: function(item) {
 		this.tempButton.setStyle(item.getName());
 	}
@@ -316,22 +440,50 @@ provides:
 
 if (!window.ViewController) window.ViewController = {};
 
+/**
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.1.0
+ */
 ViewController.Bar = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBar: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBarItem: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	backButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	styleList: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/control-bar-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 
 		this.navigationBar = this.view.getChildComponent('navigation-bar');
@@ -344,6 +496,10 @@ ViewController.Bar = new Class({
 		this.styleList.addEvent('select', this.bound('onStyleListSelect'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 
 		this.navigationBar = null;
@@ -358,10 +514,18 @@ ViewController.Bar = new Class({
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onBackButtonTap: function() {
 		this.getViewControllerStack().popViewController();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onStyleListSelect: function(item) {
 		this.navigationBar.setStyle(item.getName());
 	}
@@ -394,16 +558,36 @@ ViewController.List = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBar: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBarItem: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	backButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/control-list-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 
 		this.navigationBar = this.view.getChildComponent('navigation-bar');
@@ -413,6 +597,10 @@ ViewController.List = new Class({
 		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 
 		this.navigationBar = null;
@@ -424,6 +612,10 @@ ViewController.List = new Class({
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onBackButtonTap: function() {
 		this.getViewControllerStack().popViewController();
 	}
@@ -456,16 +648,36 @@ ViewController.Slider = new Class({
 
 	Extends: Moobile.ViewController,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBar: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	navigationBarItem: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	backButton: null,
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/control-slider-view.html');
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	viewDidLoad: function() {
 
 		this.navigationBar = this.view.getChildComponent('navigation-bar');
@@ -475,6 +687,10 @@ ViewController.Slider = new Class({
 		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	destroy: function() {
 
 		this.navigationBar = null;
@@ -486,6 +702,10 @@ ViewController.Slider = new Class({
 		this.parent();
 	},
 
+	/**
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	onBackButtonTap: function() {
 		this.getViewControllerStack().popViewController();
 	}

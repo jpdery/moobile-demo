@@ -1,0 +1,187 @@
+
+/* Navigation Bar
+-----------------------------------------------------------------------------*/
+
+.bar.navigation-bar.center .bar-item .bar-title-wrapper {
+	position: static;
+	pointer-events: none;
+}
+
+.bar.navigation-bar.center .bar-item .bar-title {
+	height: 44px;
+	line-height: 33px;
+	left: 0px;
+	position: absolute;
+	right: 0px;
+	text-align: center;
+}
+
+/* Message
+-----------------------------------------------------------------------------*/
+
+.message {
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 8px;
+	padding: 12px;
+	text-align: center;
+	width: 50%;
+}
+
+p {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	text-align: center;
+}
+
+/* Home View
+-----------------------------------------------------------------------------*/
+
+
+
+
+/* Component View - Activity Indicator
+-----------------------------------------------------------------------------*/
+
+.view.component-activity-indicator-view .component-activity-indicator-view-content {
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+
+.view.component-activity-indicator-view .start-button,
+.view.component-activity-indicator-view .stop-button {
+	position: absolute;
+	bottom: 12px;
+	width: 125px;
+}
+
+.view.component-activity-indicator-view .start-button {
+	left: 12px;
+}
+
+.view.component-activity-indicator-view .stop-button {
+	right: 12px;
+}
+
+/* Component View - Alert
+-----------------------------------------------------------------------------*/
+
+.view.component-alert-view .component-alert-view-content {
+	padding: 10px 9px;
+}
+
+/* Component View - List
+-----------------------------------------------------------------------------*/
+
+.view.component-list-default-view {
+	background: #fff;
+}
+
+
+/* Component View - Slider
+-----------------------------------------------------------------------------*/
+
+.view.component-slider-view .component-slider-view-content {
+	padding: 10px 9px;
+}
+
+.view.component-slider-view .h-value,
+.view.component-slider-view .v-value {
+	-webkit-box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 8px;
+	font-size: 24px;
+	font-weight: normal;
+	height: 75px;
+	line-height: 75px;
+	text-align: center;
+}
+
+.view.component-slider-view .h-slider,
+.view.component-slider-view .v-slider {
+	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
+}
+
+/* Horizontal Slider */
+
+.view.component-slider-view .h-slider {
+	-webkit-box-orient: vertical;
+}
+
+.view.component-slider-view .h-slider .h-value {
+	margin-top: 10px;
+}
+
+/* Vertical Slider */
+
+.view.component-slider-view .v-slider {
+	-webkit-box-orient: horizontal;
+}
+
+.view.component-slider-view .v-slider .slider {
+	height: 150px;
+}
+
+.view.component-slider-view .v-slider .v-value {
+	-webkit-box-flex: 1;
+	   -moz-box-flex: 1;
+	    -ms-box-flex: 1;
+	     -o-box-flex: 1;
+	        box-flex: 1;
+	margin-left: 10px;
+	line-height: 150px;
+	height: 150px;
+}
+
+/* Component View -  Button
+-----------------------------------------------------------------------------*/
+
+.view.component-button-view .component-button-view-content {
+	padding: 10px 9px;
+}
+
+.view.component-button-view .list {
+	padding: 0px;
+}
+
+/* Component View - ScrollView
+-----------------------------------------------------------------------------*/
+
+/* Horizontal Vertical Paging */
+
+.view.component-scroll-view-h-paging-view .page,
+.view.component-scroll-view-v-paging-view .page {
+	-webkit-box-orient: vertical;
+	-webkit-box-sizing: border-box;
+	-webkit-box-flex: 1;
+	display: -webkit-box;
+	padding: 12px;
+}
+
+.view.component-scroll-view-h-paging-view .page span,
+.view.component-scroll-view-v-paging-view .page span {
+	-webkit-box-flex: 1;
+	-webkit-box-sizing: border-box;
+	-webkit-box-align: center;
+	-webkit-box-pack: center;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 8px;
+	display: -webkit-box;
+	font-size: 24px;
+	font-weight: normal;
+	height: 100%;
+	width: 100%;
+}
+
+/* Transition View
+-----------------------------------------------------------------------------*/
+
+.view.transition-view .transition-view-content {
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+	padding: 12px;
+}
+

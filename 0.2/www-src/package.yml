@@ -1,0 +1,36 @@
+name: "App"
+
+exports: "app.js"
+
+web: ""
+
+description: ""
+
+license: ""
+
+copyright: ""
+
+authors: ""
+
+sources:
+
+  - "Source/Core/Init.js"
+  - "Source/ViewController/ViewController.Home.js"
+  - "Source/ViewController/ViewController.Transition.js"
+  - "Source/ViewController/ViewController.Component.js"
+  - "Source/ViewController/ViewController.Component.ActivityIndicator.js"
+  - "Source/ViewController/ViewController.Component.Alert.js"
+  - "Source/ViewController/ViewController.Component.Bar.js"
+  - "Source/ViewController/ViewController.Component.Bar.Style.js"
+  - "Source/ViewController/ViewController.Component.Button.js"
+  - "Source/ViewController/ViewController.Component.Button.Style.js"
+  - "Source/ViewController/ViewController.Component.List.js"
+  - "Source/ViewController/ViewController.Component.List.Style.js"
+  - "Source/ViewController/ViewController.Component.ScrollView.js"
+  - "Source/ViewController/ViewController.Component.ScrollView.HPaging.js"
+  - "Source/ViewController/ViewController.Component.ScrollView.VPaging.js"
+  - "Source/ViewController/ViewController.Component.Slider.js"
+  - "Source/ViewController/ViewController.Button.js"
+  - "Source/ViewController/ViewController.Bar.js"
+  - "Source/ViewController/ViewController.List.js"
+  - "Source/ViewController/ViewController.Slider.js"

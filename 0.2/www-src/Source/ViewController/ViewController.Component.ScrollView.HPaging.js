@@ -1,0 +1,59 @@
+/*
+---
+
+name: ViewController.Component.ScrollView.HPaging
+
+description:
+
+license:
+
+authors:
+	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+
+requires:
+	- ViewController.Component
+
+provides:
+	- ViewController.Component.ScrollView.HPaging
+
+...
+*/
+
+ViewController.Component.ScrollView.HPaging = new Class({
+
+	Extends: ViewController.Component,
+
+	options: {
+		style: 'default'
+	},
+
+	loadView: function() {
+		this.view = Moobile.ScrollView.at('templates/views/component-scroll-view-h-paging-view.html', {
+			scroll: 'horizontal',
+			scrollbar: 'none',
+			snapToPage: true,
+		});
+	},
+
+	viewDidLoad: function() {
+		this.parent();
+		this.view.setLayout('horizontal');
+	},
+
+	viewDidBecomeReady: function() {
+		this.parent();
+		this.update();
+	},
+
+	viewDidRotate: function(orientation) {
+		this.parent(orientation);
+		this.update();
+	},
+
+	update: function() {
+		var size = this.view.getContentWrapperSize();
+		this.view.setContentSize(10 * size.x);
+		this.view.getElements('.page').setStyle('width', size.x);
+	}
+
+});

@@ -1,0 +1,1991 @@
+
+/* Body
+-----------------------------------------------------------------------------*/
+
+
+body {
+	font-family: "Helvetica Neue", sans-serif;
+}
+
+input, select, textarea {
+	font-size: 15px;
+	font-weight: bold;
+	font-family: "Helvetica Neue", sans-serif;
+}
+
+/* Window
+-----------------------------------------------------------------------------*/
+
+.window {
+	background: black;
+}
+
+/* TODO: Still need this ? */
+
+/* Screen Landscape */
+@media screen and (width: 480px) and (height: 300px) {
+	.window {
+		height: 300px;
+		width: 480px;
+	}
+}
+
+/* iPhone Safari Mobile Portrait */
+@media screen and (width:320px) and (height: 356px) {
+	.window {
+		height: 416px;
+		width: 320px;
+	}
+}
+
+/* iPhone Safari Mobile Landscape */
+@media screen and (width: 480px) and (height: 208px) {
+	.window {
+		height: 268px;
+		width: 480px;
+	}
+}
+
+/* iPad Safari Mobile Portrait */
+@media screen and (width:768px) and (height: 946px) {
+	.window {
+		height: 946px;
+		width: 768px;
+	}
+}
+
+/* iPad Safari Mobile Landscape */
+@media screen and (width:1024px) and (height: 690px) {
+	.window {
+		height: 690px;
+		width: 1024px;
+	}
+}
+
+/* View
+-----------------------------------------------------------------------------*/
+
+.view {
+	background: #fff url(../images/ios/background-striped.png);
+	color: #4c596e;
+	font-size: 15px;
+	font-weight: normal;
+	text-shadow: 0px 1px 0px #fff;
+}
+
+.view h1 {
+	color: #4c596e;
+	font-size: 17px;
+	font-weight: bold;
+	margin-bottom: 12px;
+}
+
+.view h2 {
+	color: #4c596e;
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 12px;
+}
+
+.view p {
+	margin-bottom: 12px;
+}
+
+.view p small {
+	font-size: 12px;
+}
+
+/* Style Dark */
+
+.bar.style-dark {
+	background: #000;
+	color: #fff;
+	text-shadow: none;
+}
+
+.bar.style-dark h1 {
+	color: #fff;
+}
+
+.bar.style-dark h2 {
+	color: #fff;
+}
+
+/* View Stack
+-----------------------------------------------------------------------------*/
+
+.view.view-stack {
+	background: transparent;
+}
+
+/* Bar
+-----------------------------------------------------------------------------*/
+
+.bar {
+	background: url(../images/ios/bar.png) repeat-x 0px 0px;
+	color: #fff;
+	font-size: 20px;
+	font-weight: bold;
+	height: 44px;
+	padding-left: 7px;
+	padding-right: 7px;
+	text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.bar .bar-item {
+	height: 100%;
+}
+
+/* Style Dark */
+
+.bar.style-dark {
+	background-position: 0px -88px;
+	color: #fff;
+	text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Bar (Retina Display)
+-----------------------------------------------------------------------------*/
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+
+	.bar {
+		background-image: url(../images/ios/bar-2x.png);
+		background-size: 100px 176px
+	}
+
+	/* Style Dark */
+
+	.bar.style-dark {
+		background-position: 0px -88px;
+	}
+}
+
+/* Navigation Bar
+-----------------------------------------------------------------------------*/
+
+.bar.navigation-bar {
+	height: 44px;
+}
+
+.bar.navigation-bar .bar-item .bar-title {
+	-webkit-box-orient: horizontal;                              /* Important */
+	   -moz-box-orient: horizontal;                              /* Important */
+	    -ms-box-orient: horizontal;                              /* Important */
+	     -o-box-orient: horizontal;                              /* Important */
+	        box-orient: horizontal;                              /* Important */
+	-webkit-box-align: center;                                   /* Important */
+	   -moz-box-align: center;                                   /* Important */
+	    -ms-box-align: center;                                   /* Important */
+	     -o-box-align: center;                                   /* Important */
+	        box-align: center;                                   /* Important */
+	-webkit-box-pack: center;                                    /* Important */
+	   -moz-box-pack: center;                                    /* Important */
+	    -ms-box-pack: center;                                    /* Important */
+	     -o-box-pack: center;                                    /* Important */
+	        box-pack: center;                                    /* Important */
+	display: -webkit-box;                                        /* Important */
+	display:    -moz-box;                                        /* Important */
+	display:     -ms-box;                                        /* Important */
+	display:      -o-box;                                        /* Important */
+	display:         box;                                        /* Important */
+	margin-top: -1px;
+	margin-left: 8px;
+	margin-right: 8px;
+	height: inherit;
+	overflow: hidden;                                            /* Important */
+	text-overflow: ellipsis;                                     /* Important */
+	white-space: nowrap;                                         /* Important */
+}
+
+/* Button
+-----------------------------------------------------------------------------*/
+
+.button {
+	background: #fff;
+	border: 1px solid #bbb;
+	border-radius: 10px;
+	color: #000;
+	font-size: 17px;
+	font-weight: bold;
+	height: 45px;
+	padding: 0px 10px;
+	text-align: center;
+}
+
+.button.is-disabled {
+	color: rgba(0, 0, 0, 0.25);
+}
+
+.button.is-selected,
+.button.is-highlighted {
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6));
+	background:    -moz-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6));
+	background:     -ms-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6));
+	background:      -o-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6));
+	background:         gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6));
+	color: #fff;
+	text-shadow: none;
+}
+
+.button .button-label {
+	-webkit-box-orient: horizontal;                              /* Important */
+	   -moz-box-orient: horizontal;                              /* Important */
+	    -ms-box-orient: horizontal;                              /* Important */
+	     -o-box-orient: horizontal;                              /* Important */
+	        box-orient: horizontal;                              /* Important */
+	-webkit-box-align: center;                                   /* Important */
+	   -moz-box-align: center;                                   /* Important */
+	    -ms-box-align: center;                                   /* Important */
+	     -o-box-align: center;                                   /* Important */
+	        box-align: center;                                   /* Important */
+	-webkit-box-pack: center;                                    /* Important */
+	   -moz-box-pack: center;                                    /* Important */
+	    -ms-box-pack: center;                                    /* Important */
+	     -o-box-pack: center;                                    /* Important */
+	        box-pack: center;                                    /* Important */
+	display: -webkit-box;                                        /* Important */
+	display:    -moz-box;                                        /* Important */
+	display:     -ms-box;                                        /* Important */
+	display:      -o-box;                                        /* Important */
+	display:         box;                                        /* Important */
+	height: 100%;
+	overflow: hidden;                                            /* Important */
+	text-overflow: ellipsis;                                     /* Important */
+	white-space: nowrap;                                         /* Important */
+}
+
+/* Inside a Button Group */
+
+.button-group .button {
+	border-radius: 0px;
+	border-left-width: 0px;
+}
+
+.button-group .button:first-child {
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-left-width: 1px;
+}
+
+.button-group .button:last-child {
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+/* Inside a Button Group Vertical Layout */
+
+.button-group.button-group-layout-vertical .button {
+    border-radius: 0px;
+	border-width: 1px;
+	border-top-width: 0px;
+}
+
+.button-group.button-group-layout-vertical .button:first-child {
+	-webkit-border-top-left-radius: 10px;
+	   -moz-border-top-left-radius: 10px;
+	    -ms-border-top-left-radius: 10px;
+	     -o-border-top-left-radius: 10px;
+	        border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	   -moz-border-top-right-radius: 10px;
+	    -ms-border-top-right-radius: 10px;
+	     -o-border-top-right-radius: 10px;
+	        border-top-right-radius: 10px;
+	border-top-width: 1px;
+}
+
+.button-group.button-group-layout-vertical .button:last-child {
+	-webkit-border-bottom-left-radius: 10px;
+	   -moz-border-bottom-left-radius: 10px;
+	    -ms-border-bottom-left-radius: 10px;
+	     -o-border-bottom-left-radius: 10px;
+	        border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	   -moz-border-bottom-right-radius: 10px;
+	    -ms-border-bottom-right-radius: 10px;
+	     -o-border-bottom-right-radius: 10px;
+	        border-bottom-right-radius: 10px;
+}
+
+/* Inside a Bar */
+
+.bar .button {
+	-webkit-border-image: url(../images/ios/bar-button.png) 0 5 1970 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 0 5 1970 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 0 5 1970 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 0 5 1970 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 0 5 1970 fill stretch stretch;
+
+	background: none;
+	border-radius: 0px;
+	border-width: 0px 5px;
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	margin: 7px 0px;
+	padding: 0px 4px;
+	text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.bar .button.is-selected,
+.bar .button.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 30 5 1940 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 30 5 1940 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 30 5 1940 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 30 5 1940 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 30 5 1940 fill stretch stretch;
+	background-image: none;
+	color: #fff;
+	text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Inside a Bar Style Dark */
+
+.bar.style-dark .button {
+	-webkit-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+}
+
+.bar.style-dark .button.is-selected,
+.bar.style-dark .button.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+}
+
+/* Inside a Bar + Style Back */
+
+.bar .button.style-back {
+	-webkit-border-image: url(../images/ios/bar-button.png) 240 5 1730 13 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 240 5 1730 13 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 240 5 1730 13 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 240 5 1730 13 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 240 5 1730 13 fill stretch stretch;
+	border-left-width: 13px;
+	padding-left: 0px;
+}
+
+.bar .button.style-back.is-selected,
+.bar .button.style-back.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 270 5 1700 13 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 270 5 1700 13 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 270 5 1700 13 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 270 5 1700 13 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 270 5 1700 13 fill stretch stretch;
+}
+
+/* Inside a Bar Style Dark + Style Back */
+
+.bar.style-dark .button.style-back {
+	-webkit-border-image: url(../images/ios/bar-button.png) 600 5 1370 13 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 600 5 1370 13 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 600 5 1370 13 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 600 5 1370 13 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 600 5 1370 13 fill stretch stretch;
+	border-left-width: 13px;
+	padding-left: 0px;
+}
+
+.bar.style-dark .button.style-back.is-selected,
+.bar.style-dark .button.style-back.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 630 5 1340 13 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 630 5 1340 13 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 630 5 1340 13 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 630 5 1340 13 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 630 5 1340 13 fill stretch stretch;
+}
+
+/* Inside a Bar + Style Forward */
+
+.bar .button.style-forward {
+	-webkit-border-image: url(../images/ios/bar-button.png) 300 13 1670 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 300 13 1670 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 300 13 1670 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 300 13 1670 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 300 13 1670 5 fill stretch stretch;
+	border-right-width: 13px;
+	padding-right: 0px;
+}
+
+.bar .button.style-forward.is-selected,
+.bar .button.style-forward.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 330 13 1640 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 330 13 1640 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 330 13 1640 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 330 13 1640 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 330 13 1640 5 fill stretch stretch;
+}
+
+/* Inside a Bar Style Dark + Style Forward */
+
+.bar.style-dark .button.style-forward {
+	-webkit-border-image: url(../images/ios/bar-button.png) 660 13 1310 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 660 13 1310 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 660 13 1310 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 660 13 1310 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 660 13 1310 5 fill stretch stretch;
+	border-right-width: 13px;
+	padding-right: 0px;
+}
+
+.bar.style-dark .button.style-forward.is-selected,
+.bar.style-dark .button.style-forward.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 690 13 1280 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 690 13 1280 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 690 13 1280 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 690 13 1280 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 690 13 1280 5 fill stretch stretch;
+}
+
+/* Inside a Bar + Style Active */
+
+.bar .button.style-active {
+	-webkit-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+}
+
+.bar .button.style-active.is-selected,
+.bar .button.style-active.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+}
+
+/* Inside a Bar + Style Warning */
+
+.bar .button.style-warning {
+	-webkit-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+}
+
+.bar .button.style-warning.is-selected,
+.bar .button.style-warning.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+}
+
+/* Inside a Bar + Inside a Button Group */
+
+.bar .button-group .button {
+	-webkit-border-image: url(../images/ios/bar-button.png) 60 1 1910 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 60 1 1910 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 60 1 1910 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 60 1 1910 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 60 1 1910 1 fill stretch stretch;
+	border-width: 0px 1px 0px 0px;
+	padding-left: 9px;
+	padding-right: 8px;
+}
+
+.bar .button-group .button:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 90 1 1880 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 90 1 1880 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 90 1 1880 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 90 1 1880 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 90 1 1880 5 fill stretch stretch;
+	border-width: 0px 1px 0px 5px;
+	padding-left: 4px;
+}
+
+.bar .button-group .button:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 120 5 1850 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 120 5 1850 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 120 5 1850 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 120 5 1850 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 120 5 1850 1 fill stretch stretch;
+	border-width: 0px 5px 0px 0px;
+	padding-right: 4px;
+}
+
+.bar .button-group .button.is-selected,
+.bar .button-group .button.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 150 1 1820 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 150 1 1820 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 150 1 1820 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 150 1 1820 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 150 1 1820 1 fill stretch stretch;
+}
+
+.bar .button-group .button.is-selected:first-child,
+.bar .button-group .button.is-highlighted:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 180 1 1790 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 180 1 1790 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 180 1 1790 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 180 1 1790 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 180 1 1790 5 fill stretch stretch;
+}
+
+.bar .button-group .button.is-selected:last-child,
+.bar .button-group .button.is-highlighted:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 210 5 1760 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 210 5 1760 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 210 5 1760 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 210 5 1760 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 210 5 1760 1 fill stretch stretch;
+}
+
+/* Inside a Bar Style Dark + Inside a Button Group */
+
+.bar.style-dark .button-group .button {
+	-webkit-border-image: url(../images/ios/bar-button.png) 420 1 1550 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 420 1 1550 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 420 1 1550 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 420 1 1550 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 420 1 1550 1 fill stretch stretch;
+}
+
+.bar.style-dark .button-group .button:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 450 1 1520 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 450 1 1520 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 450 1 1520 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 450 1 1520 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 450 1 1520 5 fill stretch stretch;
+}
+
+.bar.style-dark .button-group .button:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 480 5 1490 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 480 5 1490 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 480 5 1490 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 480 5 1490 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 480 5 1490 1 fill stretch stretch;
+}
+
+.bar.style-dark .button-group .button.is-selected,
+.bar.style-dark .button-group .button.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 510 1 1460 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 510 1 1460 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 510 1 1460 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 510 1 1460 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 510 1 1460 1 fill stretch stretch;
+}
+
+.bar.style-dark .button-group .button.is-selected:first-child,
+.bar.style-dark .button-group .button.is-highlighted:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 540 1 1430 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 540 1 1430 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 540 1 1430 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 540 1 1430 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 540 1 1430 5 fill stretch stretch;
+}
+
+.bar.style-dark .button-group .button.is-selected:last-child,
+.bar.style-dark .button-group .button.is-highlighted:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 570 5 1400 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 570 5 1400 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 570 5 1400 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 570 5 1400 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 570 5 1400 1 fill stretch stretch;
+}
+
+/* Inside a Bar + Inside a Button Group + Style Active */
+
+.bar .button-group .button.style-active {
+	-webkit-border-image: url(../images/ios/bar-button.png) 780 1 1190 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 780 1 1190 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 780 1 1190 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 780 1 1190 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 780 1 1190 1 fill stretch stretch;
+	border-width: 0px 1px 0px 0px;
+	padding-left: 9px;
+	padding-right: 8px;
+}
+
+.bar .button-group .button.style-active:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 810 1 1160 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 810 1 1160 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 810 1 1160 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 810 1 1160 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 810 1 1160 5 fill stretch stretch;
+	border-width: 0px 1px 0px 5px;
+	padding-left: 4px;
+}
+
+.bar .button-group .button.style-active:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 840 5 1130 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 840 5 1130 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 840 5 1130 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 840 5 1130 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 840 5 1130 1 fill stretch stretch;
+	border-width: 0px 5px 0px 0px;
+	padding-right: 4px;
+}
+
+.bar .button-group .button.style-active.is-selected,
+.bar .button-group .button.style-active.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 870 1 1100 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 870 1 1100 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 870 1 1100 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 870 1 1100 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 870 1 1100 1 fill stretch stretch;
+}
+
+.bar .button-group .button.style-active.is-selected:first-child,
+.bar .button-group .button.style-active.is-highlighted:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 900 1 1070 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 900 1 1070 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 900 1 1070 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 900 1 1070 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 900 1 1070 5 fill stretch stretch;
+}
+
+.bar .button-group .button.style-active.is-selected:last-child,
+.bar .button-group .button.style-active.is-highlighted:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 930 5 1040 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 930 5 1040 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 930 5 1040 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 930 5 1040 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 930 5 1040 1 fill stretch stretch;
+}
+
+/* Inside a Bar + Inside a Button Group + Style Warning */
+
+.bar .button-group .button.style-warning {
+	-webkit-border-image: url(../images/ios/bar-button.png) 1020 1 950 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 1020 1 950 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 1020 1 950 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 1020 1 950 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 1020 1 950 1 fill stretch stretch;
+	border-width: 0px 1px 0px 0px;
+	padding-left: 9px;
+	padding-right: 8px;
+}
+
+.bar .button-group .button.style-warning:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 1050 1 920 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 1050 1 920 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 1050 1 920 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 1050 1 920 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 1050 1 920 5 fill stretch stretch;
+	border-width: 0px 1px 0px 5px;
+	padding-left: 4px;
+}
+
+.bar .button-group .button.style-warning:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 1080 5 890 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 1080 5 890 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 1080 5 890 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 1080 5 890 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 1080 5 890 1 fill stretch stretch;
+	border-width: 0px 5px 0px 0px;
+	padding-right: 4px;
+}
+
+.bar .button-group .button.style-warning.is-selected,
+.bar .button-group .button.style-warning.is-highlighted {
+	-webkit-border-image: url(../images/ios/bar-button.png) 1110 1 860 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 1110 1 860 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 1110 1 860 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 1110 1 860 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 1110 1 860 1 fill stretch stretch;
+}
+
+.bar .button-group .button.style-warning.is-selected:first-child,
+.bar .button-group .button.style-warning.is-highlighted:first-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 1140 1 830 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 1140 1 830 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 1140 1 830 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 1140 1 830 5 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 1140 1 830 5 fill stretch stretch;
+}
+
+.bar .button-group .button.style-warning.is-selected:last-child,
+.bar .button-group .button.style-warning.is-highlighted:last-child {
+	-webkit-border-image: url(../images/ios/bar-button.png) 1170 5 800 1 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/bar-button.png) 1170 5 800 1 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/bar-button.png) 1170 5 800 1 fill stretch stretch;
+	     -o-border-image: url(../images/ios/bar-button.png) 1170 5 800 1 fill stretch stretch;
+	        border-image: url(../images/ios/bar-button.png) 1170 5 800 1 fill stretch stretch;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+
+	/* Inside a Bar */
+
+	.bar .button {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 0 10 3940 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 0 10 3940 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 0 10 3940 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 0 10 3940 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 0 10 3940 fill stretch stretch;
+	}
+
+	.bar .button.is-selected,
+	.bar .button.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 60 10 3880 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 60 10 3880 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 60 10 3880 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 60 10 3880 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 60 10 3880 fill stretch stretch;
+	}
+
+	/* Inside a Bar Style Dark */
+
+	.bar.style-dark .button {
+		-webkit-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button.png) 360 5 1610 fill stretch stretch;
+	}
+
+	.bar.style-dark .button.is-selected,
+	.bar.style-dark .button.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button.png) 390 5 1580 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Style Back */
+
+	.bar .button.style-back {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 480 10 3460 26 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 480 10 3460 26 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 480 10 3460 26 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 480 10 3460 26 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 480 10 3460 26 fill stretch stretch;
+	}
+
+	.bar .button.style-back.is-selected,
+	.bar .button.style-back.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 540 10 3400 26 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 540 10 3400 26 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 540 10 3400 26 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 540 10 3400 26 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 540 10 3400 26 fill stretch stretch;
+	}
+
+	/* Inside a Bar Style Dark + Style Back */
+
+	.bar.style-dark .button.style-back {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 1200 10 2740 26 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 1200 10 2740 26 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 1200 10 2740 26 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 1200 10 2740 26 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 1200 10 2740 26 fill stretch stretch;
+	}
+
+	.bar.style-dark .button.style-back.is-selected,
+	.bar.style-dark .button.style-back.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 1260 10 2680 26 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 1260 10 2680 26 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 1260 10 2680 26 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 1260 10 2680 26 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 1260 10 2680 26 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Style Forward */
+
+	.bar .button.style-forward {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 600 26 3340 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 600 26 3340 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 600 26 3340 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 600 26 3340 10 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 600 26 3340 10 fill stretch stretch;
+	}
+
+	.bar .button.style-forward.is-selected,
+	.bar .button.style-forward.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 660 26 3280 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 660 26 3280 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 660 26 3280 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 660 26 3280 10 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 660 26 3280 10 fill stretch stretch;
+	}
+
+	/* Inside a Bar Style Dark + Style Forward */
+
+	.bar.style-dark .button.style-forward {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 1320 26 2620 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 1320 26 2620 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 1320 26 2620 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 1320 26 2620 10 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 1320 26 2620 10 fill stretch stretch;
+	}
+
+	.bar.style-dark .button.style-forward.is-selected,
+	.bar.style-dark .button.style-forward.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 1380 26 2560 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 1380 26 2560 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 1380 26 2560 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 1380 26 2560 10 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 1380 26 2560 10 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Style Active */
+
+	.bar .button.style-active {
+		-webkit-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button.png) 720 5 1250 fill stretch stretch;
+	}
+
+	.bar .button.style-active.is-selected,
+	.bar .button.style-active.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button.png) 750 5 1220 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Style Warning */
+
+	.bar .button.style-warning {
+		-webkit-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button.png) 960 5 1010 fill stretch stretch;
+	}
+
+	.bar .button.style-warning.is-selected,
+	.bar .button.style-warning.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button.png) 990 5 980 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Inside a Button Group */
+
+	.bar .button-group .button {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.is-selected,
+	.bar .button-group .button.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.is-selected:first-child,
+	.bar .button-group .button.is-highlighted:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.is-selected:last-child,
+	.bar .button-group .button.is-highlighted:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	/* Inside a Bar Style Dark + Inside a Button Group */
+
+	.bar.style-dark .button-group .button {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar.style-dark .button-group .button:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar.style-dark .button-group .button.style-dark:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar.style-dark .button-group .button.is-selected,
+	.bar.style-dark .button-group .button.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar.style-dark .button-group .button.is-selected:first-child,
+	.bar.style-dark .button-group .button.is-highlighted:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar.style-dark .button-group .button.is-selected:last-child,
+	.bar.style-dark .button-group .button.is-highlighted:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Inside a Button Group + Style Active */
+
+	.bar .button-group .button.style-active {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		border-width: 0px 1px 0px 0px;
+		padding-left: 9px;
+		padding-right: 8px;
+	}
+
+	.bar .button-group .button.style-active:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		border-width: 0px 1px 0px 5px;
+		padding-left: 4px;
+	}
+
+	.bar .button-group .button.style-active:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		border-width: 0px 5px 0px 0px;
+		padding-right: 4px;
+	}
+
+	.bar .button-group .button.style-active.is-selected,
+	.bar .button-group .button.style-active.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-active.is-selected:first-child,
+	.bar .button-group .button.style-active.is-highlighted:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-active.is-selected:last-child,
+	.bar .button-group .button.style-active.is-highlighted:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	/* Inside a Bar + Inside a Button Group + Style Warning */
+
+	.bar .button-group .button.style-warning {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-warning:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-warning:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-warning.is-selected,
+	.bar .button-group .button.style-warning.is-highlighted {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-warning.is-selected:first-child,
+	.bar .button-group .button.style-warning.is-highlighted:first-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+
+	.bar .button-group .button.style-warning.is-selected:last-child,
+	.bar .button-group .button.style-warning.is-highlighted:last-child {
+		-webkit-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		     -o-border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+		        border-image: url(../images/ios/bar-button-2x.png) 720 10 3220 fill stretch stretch;
+	}
+}
+
+/* List
+-----------------------------------------------------------------------------*/
+
+.list {
+	background: #fff;
+	border-left: none;
+	border-right: none;
+}
+
+/* Style Grouped */
+
+.list.style-grouped {
+	-webkit-background-clip: padding-box;
+	   -moz-background-clip: padding-box;
+	    -ms-background-clip: padding-box;
+	     -o-background-clip: padding-box;
+	        background-clip: padding-box;
+	border-radius: 8px;
+	margin-bottom: 24px;
+}
+
+/* List Item
+-----------------------------------------------------------------------------*/
+
+.list-item {
+	background: #fff;
+	border-top: 1px solid #bbb;
+	color: #000;
+	font-size: 17px;
+	font-weight: bold;
+	height: 45px;
+	padding: 0px 15px;
+}
+
+.list-item:last-child {
+	border-bottom: 1px solid #bbb;
+}
+
+.list-item .list-item-label {
+	-webkit-box-orient: horizontal;                              /* Important */
+	   -moz-box-orient: horizontal;                              /* Important */
+	    -ms-box-orient: horizontal;                              /* Important */
+	     -o-box-orient: horizontal;                              /* Important */
+	        box-orient: horizontal;                              /* Important */
+	-webkit-box-align: center;                                   /* Important */
+	   -moz-box-align: center;                                   /* Important */
+	    -ms-box-align: center;                                   /* Important */
+	     -o-box-align: center;                                   /* Important */
+	        box-align: center;                                   /* Important */
+	-webkit-box-pack: start;                                     /* Important */
+	   -moz-box-pack: start;                                     /* Important */
+	    -ms-box-pack: start;                                     /* Important */
+	     -o-box-pack: start;                                     /* Important */
+	        box-pack: start;                                     /* Important */
+	display: -webkit-box;                                        /* Important */
+	display:    -moz-box;                                        /* Important */
+	display:     -ms-box;                                        /* Important */
+	display:      -o-box;                                        /* Important */
+	display:         box;                                        /* Important */
+	height: 100%;                                                /* Important */
+	overflow: hidden;                                            /* Important */
+	text-overflow: ellipsis;                                     /* Important */
+	white-space: nowrap;                                         /* Important */
+}
+
+.list-item .list-item-image {
+	-webkit-background-clip: padding-box;
+	   -moz-background-clip: padding-box;
+	    -ms-background-clip: padding-box;
+	     -o-background-clip: padding-box;
+	        background-clip: padding-box;
+	border-radius: 4px;
+	height: 29px;
+	margin: -6px 10px -6px -6px;
+	width: 29px;
+}
+
+.list-item .list-item-detail {
+	-webkit-box-orient: horizontal;                              /* Important */
+	   -moz-box-orient: horizontal;                              /* Important */
+	    -ms-box-orient: horizontal;                              /* Important */
+	     -o-box-orient: horizontal;                              /* Important */
+	        box-orient: horizontal;                              /* Important */
+	-webkit-box-align: center;                                   /* Important */
+	   -moz-box-align: center;                                   /* Important */
+	    -ms-box-align: center;                                   /* Important */
+	     -o-box-align: center;                                   /* Important */
+	        box-align: center;                                   /* Important */
+	-webkit-box-pack: start;                                     /* Important */
+	   -moz-box-pack: start;                                     /* Important */
+	    -ms-box-pack: start;                                     /* Important */
+	     -o-box-pack: start;                                     /* Important */
+	        box-pack: start;                                     /* Important */
+	color: #395587;
+	display: -webkit-box;                                        /* Important */
+	display:    -moz-box;                                        /* Important */
+	display:     -ms-box;                                        /* Important */
+	display:      -o-box;                                        /* Important */
+	display:         box;                                        /* Important */
+	font-size: 17px;
+	font-weight: normal;
+	height: 100%;                                                /* Important */
+}
+
+.list-item.is-selected,
+.list-item.is-highlighted {
+	/* TODO: Use new syntax */;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6)) !important;
+	background:    -moz-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6)) !important;
+	background:     -ms-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6)) !important;
+	background:      -o-gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6)) !important;
+	background:         gradient(linear, left bottom, left top, color-stop(0, #058DF5), color-stop(1, #0160E6)) !important;
+	color: #fff;
+	text-shadow: none;
+}
+
+.list-item.is-selected    .list-item-detail,
+.list-item.is-highlighted .list-item-detail {
+	color: #fff;
+}
+
+.list-item .list-item-detail:after {
+	width: 30px;
+}
+
+ /* Style Checked, Style Detailed, Style Disclosed */
+
+.list-item.style-checked   .list-item-detail,
+.list-item.style-detailed  .list-item-detail,
+.list-item.style-disclosed .list-item-detail {
+	padding-right: 35px;
+}
+
+.list-item.style-checked   .list-item-detail:after,
+.list-item.style-detailed  .list-item-detail:after,
+.list-item.style-disclosed .list-item-detail:after {
+	background-image: url(../images/ios/list-item-style-icon.png);
+	background-repeat: no-repeat;
+}
+
+/* Style Checked */
+
+.list-item.style-checked .list-item-detail:after {
+	background-position: -60px center;
+}
+
+.list-item.style-checked.is-selected    .list-item-detail:after,
+.list-item.style-checked.is-highlighted .list-item-detail:after {
+	background-position: -90px center;
+}
+
+/* Style Detailed */
+
+.list-item.style-detailed .list-item-detail:after {
+	background-position: -120px center;
+}
+
+.list-item.style-detailed.is-selected    .list-item-detail:after,
+.list-item.style-detailed.is-highlighted .list-item-detail:after {
+	background-position: -120px center;
+}
+
+/* Style Disclosed */
+
+.list-item.style-disclosed .list-item-detail:after {
+	background-position: 0px center;
+}
+
+.list-item.style-disclosed.is-selected    .list-item-detail:after,
+.list-item.style-disclosed.is-highlighted .list-item-detail:after {
+	background-position: -30px center;
+}
+
+/* Inside a List Style Grouped */
+
+.list.style-grouped .list-item {
+	background: #fff;
+	border: 1px solid #bbb;
+	border-bottom: none;
+}
+
+.list.style-grouped .list-item:first-child {
+	-webkit-border-top-left-radius: 8px;
+	   -moz-border-top-left-radius: 8px;
+	    -ms-border-top-left-radius: 8px;
+	     -o-border-top-left-radius: 8px;
+	        border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+	   -moz-border-top-right-radius: 8px;
+	    -ms-border-top-right-radius: 8px;
+	     -o-border-top-right-radius: 8px;
+	        border-top-right-radius: 8px;
+}
+
+.list.style-grouped .list-item:last-child {
+	-webkit-border-bottom-left-radius: 8px;
+	   -moz-border-bottom-left-radius: 8px;
+	    -ms-border-bottom-left-radius: 8px;
+	     -o-border-bottom-left-radius: 8px;
+	        border-bottom-left-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	   -moz-border-bottom-right-radius: 8px;
+	    -ms-border-bottom-right-radius: 8px;
+	     -o-border-bottom-right-radius: 8px;
+	        border-bottom-right-radius: 8px;
+	border: 1px solid #bbb;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+
+    /* Style Checked, Style Detailed, Style Disclosed */
+
+	.list-item.style-checked   .list-item-detail:after,
+	.list-item.style-detailed  .list-item-detail:after,
+	.list-item.style-disclosed .list-item-detail:after {
+		background-image: url(../images/ios/list-item-style-icon-2x.png);
+		background-size: 150px 30px;
+	}
+}
+
+/* List Item Header
+-----------------------------------------------------------------------------*/
+
+.list-item.list-item-header {
+	background: url(../images/ios/list-item-header.png) !important;
+	border: none;
+	color: #fff;
+	font-size: 18px;
+	font-weight: bold;
+	height: 23px;
+	padding: 0px 15px;
+	pointer-events: none;
+	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.4);
+}
+
+.list-item.list-item-header.is-selected,
+.list-item.list-item-header.is-highlighted {
+	background: url(../images/ios/list-item-header.png) !important;
+	border: none;
+}
+
+/* Style Grouped */
+
+/* Overlay
+-----------------------------------------------------------------------------*/
+
+.overlay {
+	background: rgba(0, 0, 0, 0.30);
+}
+
+/* Alert
+-----------------------------------------------------------------------------*/
+
+.alert {
+	color: #fff;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.alert .alert-box {
+	-webkit-box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.45);
+	   -moz-box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.45);
+	    -ms-box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.45);
+	     -o-box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.45);
+	        box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.45);
+	-webkit-border-image: url(../images/ios/alert.png) 35 15 15 15 fill stretch;
+	   -moz-border-image: url(../images/ios/alert.png) 35 15 15 15 fill stretch;
+	    -ms-border-image: url(../images/ios/alert.png) 35 15 15 15 fill stretch;
+	     -o-border-image: url(../images/ios/alert.png) 35 15 15 15 fill stretch;
+	        border-image: url(../images/ios/alert.png) 35 15 15 15 fill stretch;
+	border-radius: 12px;
+	border-width: 15px;
+	border-top-width: 35px;
+	width: 280px;
+}
+
+.alert .alert-header {
+	font-size: 18px;
+	font-weight: bold;
+	margin-top: -19px;
+	margin-bottom: 11px;
+	text-align: center;
+}
+
+.alert .alert-content {
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 20px;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.alert .alert-footer {
+	display: -webkit-box;                                        /* Important */
+	display:    -moz-box;                                        /* Important */
+	display:     -ms-box;                                        /* Important */
+	display:      -o-box;                                        /* Important */
+	display:         box;                                        /* Important */
+	margin-left: -5px;
+	margin-right: -5px;
+	margin-bottom: -5px;
+}
+
+.alert .alert-footer .button {
+	-webkit-box-flex: 1;                                         /* Important */
+	   -moz-box-flex: 1;                                         /* Important */
+	    -ms-box-flex: 1;                                         /* Important */
+	     -o-box-flex: 1;                                         /* Important */
+	        box-flex: 1;                                         /* Important */
+	-webkit-border-image: url(../images/ios/alert-button.png) 0 5 86 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/alert-button.png) 0 5 86 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/alert-button.png) 0 5 86 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/alert-button.png) 0 5 86 5 fill stretch stretch;
+	        border-image: url(../images/ios/alert-button.png) 0 5 86 5 fill stretch stretch;
+	background: none;
+	border-radius: 0px;
+	border-width: 0px 5px;
+	color: #fff;
+	font-size: 18px;
+	font-weight: bold;
+	height: 43px;
+	line-height: 42px;
+	margin: 0px;
+	margin-left: 4px;
+	margin-right: 4px;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.8);
+	text-align: center;
+}
+
+.alert .alert-footer .button:first-child {
+	margin-left: 0px;
+}
+
+.alert .alert-footer .button:last-child {
+ 	margin-right: 0px;
+ }
+
+.alert .alert-footer .button.is-default {
+	-webkit-border-image: url(../images/ios/alert-button.png) 43 5 43 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/alert-button.png) 43 5 43 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/alert-button.png) 43 5 43 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/alert-button.png) 43 5 43 5 fill stretch stretch;
+	        border-image: url(../images/ios/alert-button.png) 43 5 43 5 fill stretch stretch;
+}
+
+.alert .alert-footer .button.is-selected,
+.alert .alert-footer .button.is-highlighted {
+	-webkit-border-image: url(../images/ios/alert-button.png) 86 5 0 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/alert-button.png) 86 5 0 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/alert-button.png) 86 5 0 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/alert-button.png) 86 5 0 5 fill stretch stretch;
+	        border-image: url(../images/ios/alert-button.png) 86 5 0 5 fill stretch stretch;
+}
+
+/* Vertical Layout */
+
+.alert.alert-layout-vertical .alert-footer {
+	-webkit-box-orient: vertical;                                /* Important */
+	   -moz-box-orient: vertical;                                /* Important */
+	    -ms-box-orient: vertical;                                /* Important */
+	     -o-box-orient: vertical;                                /* Important */
+	        box-orient: vertical;                                /* Important */
+}
+
+.alert.alert-layout-vertical .alert-footer .button {
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-bottom: 5px;
+}
+
+.alert.alert-layout-vertical .alert-footer .button:last-child {
+	margin-bottom: 0px;
+}
+
+/* Overlay */
+
+.alert .overlay {
+	background: -webkit-gradient(radial, center center, 0, center center, 250, from(rgba(0, 0, 0, 0.10)), to(rgba(0, 0, 0, 0.30)));
+	background: -webkit-radial-gradient(circle, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.30) 250px);
+	background:    -moz-radial-gradient(circle, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.30) 250px);
+	background:     -ms-radial-gradient(circle, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.30) 250px);
+	background:      -o-radial-gradient(circle, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.30) 250px);
+	background:         radial-gradient(circle, rgba(0, 0, 0, 0.10) 0px, rgba(0, 0, 0, 0.30) 250px);
+}
+
+/* Show Animation */
+
+@-webkit-keyframes anim-show-alert-ios {
+	0%   { -webkit-transform: scale(0.6); opacity: 0; }
+	45%  { -webkit-transform: scale(1.1); opacity: 1; }
+	75%  { -webkit-transform: scale(0.9); }
+	100% { -webkit-transform: scale(1.0); }
+}
+@-moz-keyframes anim-show-alert-ios {
+	0%   { -webkit-transform: scale(0.6); opacity: 0; }
+	45%  { -webkit-transform: scale(1.1); opacity: 1; }
+	75%  { -webkit-transform: scale(0.9); }
+	100% { -webkit-transform: scale(1.0); }
+}
+@-ms-keyframes anim-show-alert-ios {
+	0%   { -webkit-transform: scale(0.6); opacity: 0; }
+	45%  { -webkit-transform: scale(1.1); opacity: 1; }
+	75%  { -webkit-transform: scale(0.9); }
+	100% { -webkit-transform: scale(1.0); }
+}
+@-o-keyframes anim-show-alert-ios {
+	0%   { -webkit-transform: scale(0.6); opacity: 0; }
+	45%  { -webkit-transform: scale(1.1); opacity: 1; }
+	75%  { -webkit-transform: scale(0.9); }
+	100% { -webkit-transform: scale(1.0); }
+}
+@keyframes anim-show-alert-ios {
+	0%   { -webkit-transform: scale(0.6); opacity: 0; }
+	45%  { -webkit-transform: scale(1.1); opacity: 1; }
+	75%  { -webkit-transform: scale(0.9); }
+	100% { -webkit-transform: scale(1.0); }
+}
+
+.alert.show-animated .alert-box {
+	-webkit-animation: anim-show-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1);
+	   -moz-animation: anim-show-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1);
+	    -ms-animation: anim-show-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1);
+	     -o-animation: anim-show-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1);
+	        animation: anim-show-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1);
+}
+
+/* Hide Animation */
+
+@-webkit-keyframes anim-hide-alert-ios {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+@-moz-keyframes anim-hide-alert-ios {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+@-ms-keyframes anim-hide-alert-ios {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+@-o-keyframes anim-hide-alert-ios {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+@keyframes anim-hide-alert-ios {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+.alert.hide-animated .alert-box {
+	-webkit-animation: anim-hide-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1) 1;
+	   -moz-animation: anim-hide-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1) 1;
+	    -ms-animation: anim-hide-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1) 1;
+	     -o-animation: anim-hide-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1) 1;
+	        animation: anim-hide-alert-ios 400ms cubic-bezier(0.5, 0.1, 0.5, 1) 1;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+
+	.alert .alert-box {
+		-webkit-border-image: url(../images/ios/alert-2x.png) 70 30 30 30 stretch;
+		   -moz-border-image: url(../images/ios/alert-2x.png) 70 30 30 30 stretch;
+		    -ms-border-image: url(../images/ios/alert-2x.png) 70 30 30 30 stretch;
+		     -o-border-image: url(../images/ios/alert-2x.png) 70 30 30 30 stretch;
+		        border-image: url(../images/ios/alert-2x.png) 70 30 30 30 stretch;
+	}
+
+	.alert .alert-footer .button {
+		-webkit-border-image: url(../images/ios/alert-button-2x.png) 0 10 173 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/alert-button-2x.png) 0 10 173 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/alert-button-2x.png) 0 10 173 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/alert-button-2x.png) 0 10 173 10 fill stretch stretch;
+		        border-image: url(../images/ios/alert-button-2x.png) 0 10 173 10 fill stretch stretch;
+	}
+
+	.alert .alert-footer .button.default {
+		-webkit-border-image: url(../images/ios/alert-button-2x.png) 86 10 87 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/alert-button-2x.png) 86 10 87 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/alert-button-2x.png) 86 10 87 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/alert-button-2x.png) 86 10 87 10 fill stretch stretch;
+		        border-image: url(../images/ios/alert-button-2x.png) 86 10 87 10 fill stretch stretch;
+	}
+
+	.alert .alert-footer .button.is-selected,
+	.alert .alert-footer .button.is-highlighted {
+		-webkit-border-image: url(../images/ios/alert-button-2x.png) 173 10 0 10 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/alert-button-2x.png) 173 10 0 10 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/alert-button-2x.png) 173 10 0 10 fill stretch stretch;
+		     -o-border-image: url(../images/ios/alert-button-2x.png) 173 10 0 10 fill stretch stretch;
+		        border-image: url(../images/ios/alert-button-2x.png) 173 10 0 10 fill stretch stretch;
+	}
+}
+
+/* Activity Indicator
+-----------------------------------------------------------------------------*/
+
+.activity-indicator {
+	-webkit-transform-origin: 50% 50%;
+	   -moz-transform-origin: 50% 50%;
+	    -ms-transform-origin: 50% 50%;
+	     -o-transform-origin: 50% 50%;
+	        transform-origin: 50% 50%;
+	background: url(../images/ios/activity-indicator.png);
+	height: 21px;
+	width: 21px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+
+	.activity-indicator {
+		background-image: url(../images/ios/activity-indicator-2x.png);
+		background-size: 21px 20px;
+	}
+}
+
+/* Slider
+-----------------------------------------------------------------------------*/
+
+.slider {
+	-webkit-border-image: url(../images/ios/slider-track-background-h.png) 0 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/slider-track-background-h.png) 0 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/slider-track-background-h.png) 0 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/slider-track-background-h.png) 0 5 fill stretch stretch;
+	        border-image: url(../images/ios/slider-track-background-h.png) 0 5 fill stretch stretch;
+	border-width: 0px 5px;
+	height: 9px;
+	margin: 0px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	position: relative;                                          /* Important */
+}
+
+.slider .slider-track {
+	height: 9px;
+	left: -12px;
+	position: absolute;
+	right: -12px;
+}
+
+.slider .slider-track:after {
+	background: url(../images/ios/slider-track-foreground-h.png) no-repeat center left;
+	background-size: 50px 9px;
+	content: '';
+	display: block;
+	height: 9px;
+	left: 5px;
+	position: absolute;
+	width: 10px;
+}
+
+.slider .slider-thumb {
+	background: url(../images/ios/slider-thumb.png) no-repeat center center;
+	background-size: 24px 24px;
+	height: 24px;
+	margin-top: -7px;
+	margin-left: 0px;
+	position: absolute;
+	width: 24px;
+	z-index: 75;
+}
+
+.slider .slider-range {
+	height: 9px;
+	left: 10px;
+	overflow: hidden;                                            /* Important */
+	position: absolute;
+	right: 10px;
+	z-index: 50;
+}
+
+.slider .slider-value {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	     -o-box-sizing: border-box;
+	        box-sizing: border-box;
+	-webkit-border-image: url(../images/ios/slider-track-foreground-h.png) 0 5 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/slider-track-foreground-h.png) 0 5 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/slider-track-foreground-h.png) 0 5 fill stretch stretch;
+	     -o-border-image: url(../images/ios/slider-track-foreground-h.png) 0 5 fill stretch stretch;
+	        border-image: url(../images/ios/slider-track-foreground-h.png) 0 5 fill stretch stretch;
+	border-width: 0px 5px;
+	height: 9px;
+	left: -100%;
+	position: absolute;
+	top: 0px;
+	width: 100%;
+}
+
+/* Vertical Mode */
+
+.slider.slider-mode-vertical {
+	-webkit-border-image: url(../images/ios/slider-track-background-v.png) 5 0 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/slider-track-background-v.png) 5 0 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/slider-track-background-v.png) 5 0 fill stretch stretch;
+	     -o-border-image: url(../images/ios/slider-track-background-v.png) 5 0 fill stretch stretch;
+	        border-image: url(../images/ios/slider-track-background-v.png) 5 0 fill stretch stretch;
+	border-width: 5px 0px;
+	height: auto;
+	margin: 0px;
+	margin-left: 8px;
+	margin-right: 8px;
+	position: relative;
+	width: 9px;
+}
+
+.slider.slider-mode-vertical .slider-track {
+	bottom: -12px;
+	height: auto;
+	left: auto;
+	top: -12px;
+	right: auto;
+	width: 9px;
+}
+
+.slider.slider-mode-vertical .slider-track:after {
+	background: url(../images/ios/slider-track-foreground-v.png) no-repeat center top;
+	background-size: 9px 50px;
+	height: 10px;
+	left: auto;
+	top: 5px;
+	width: 9px;
+}
+
+.slider.slider-mode-vertical .slider-thumb {
+	margin-top: 0px;
+	margin-left: -7px;
+}
+
+.slider.slider-mode-vertical .slider-range {
+	bottom: 10px;
+	height: auto;
+	left: auto;
+	right: auto;
+	top: 10px;
+	width: 100%;
+}
+
+.slider.slider-mode-vertical .slider-value {
+	-webkit-border-image: url(../images/ios/slider-track-foreground-v.png) 5 0 fill stretch stretch;
+	   -moz-border-image: url(../images/ios/slider-track-foreground-v.png) 5 0 fill stretch stretch;
+	    -ms-border-image: url(../images/ios/slider-track-foreground-v.png) 5 0 fill stretch stretch;
+	     -o-border-image: url(../images/ios/slider-track-foreground-v.png) 5 0 fill stretch stretch;
+	        border-image: url(../images/ios/slider-track-foreground-v.png) 5 0 fill stretch stretch;
+	border-width: 5px 0px;
+	left: 0px;
+	height: 100%;
+	top: -100%;
+	width: 9px;
+}
+
+/* Hit Area */
+
+.slider-thumb .hit-area {
+	bottom: -10px;
+	display: block;
+	content: '';
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	left: -10px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min-device-pixel-ratio: 2) {
+
+	.slider .slider-track {
+		-webkit-border-image: url(../images/ios/slider-track-background-h-2x.png) 0 5 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/slider-track-background-h-2x.png) 0 5 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/slider-track-background-h-2x.png) 0 5 fill stretch stretch;
+		     -o-border-image: url(../images/ios/slider-track-background-h-2x.png) 0 5 fill stretch stretch;
+		        border-image: url(../images/ios/slider-track-background-h-2x.png) 0 5 fill stretch stretch;
+	}
+
+	.slider.slider-mode-vertical .slider-track {
+		-webkit-border-image: url(../images/ios/slider-track-background-v-2x.png) 5 0 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/slider-track-background-v-2x.png) 5 0 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/slider-track-background-v-2x.png) 5 0 fill stretch stretch;
+		     -o-border-image: url(../images/ios/slider-track-background-v-2x.png) 5 0 fill stretch stretch;
+		        border-image: url(../images/ios/slider-track-background-v-2x.png) 5 0 fill stretch stretch;
+	}
+
+	.slider .slider-track:after {
+		background: url(../images/ios/slider-track-foreground-h-2x.png) no-repeat center left;
+	}
+
+	.slider.slider-mode-vertical .slider-track:after {
+		background: url(../images/ios/slider-track-foreground-v-2x.png) no-repeat center top;
+	}
+
+	.slider .slider-thumb {
+		background: url(../images/ios/slider-thumb-2x.png) no-repeat center center;
+	}
+
+	.slider .slider-value {
+		-webkit-border-image: url(../images/ios/slider-track-foreground-h-2x.png) 0 5 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/slider-track-foreground-h-2x.png) 0 5 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/slider-track-foreground-h-2x.png) 0 5 fill stretch stretch;
+		     -o-border-image: url(../images/ios/slider-track-foreground-h-2x.png) 0 5 fill stretch stretch;
+		        border-image: url(../images/ios/slider-track-foreground-h-2x.png) 0 5 fill stretch stretch;
+	}
+
+	.slider.slider-mode-vertical .slider-value {
+		-webkit-border-image: url(../images/ios/slider-track-foreground-v-2x.png) 5 0 fill stretch stretch;
+		   -moz-border-image: url(../images/ios/slider-track-foreground-v-2x.png) 5 0 fill stretch stretch;
+		    -ms-border-image: url(../images/ios/slider-track-foreground-v-2x.png) 5 0 fill stretch stretch;
+		     -o-border-image: url(../images/ios/slider-track-foreground-v-2x.png) 5 0 fill stretch stretch;
+		        border-image: url(../images/ios/slider-track-foreground-v-2x.png) 5 0 fill stretch stretch;
+}
+
+/* Transition Slide (Enter)
+-----------------------------------------------------------------------------*/
+
+.transition-slide-enter .transition-view-to-show {
+	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+}
+
+.transition-slide-enter .transition-view-to-hide {
+	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+}
+
+/* Enter Navigation Bar */
+
+@-webkit-keyframes transition-slide-enter-bar-to-show {
+	from { -webkit-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+	to   { -webkit-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+}
+@-moz-keyframes transition-slide-enter-bar-to-show {
+	from { -moz-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+	to   { -moz-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+}
+@-ms-keyframes transition-slide-enter-bar-to-show {
+	from { -ms-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+	to   { -ms-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+}
+@-o-keyframes transition-slide-enter-bar-to-show {
+	from { -o-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+	to   { -o-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+}
+@keyframes transition-slide-enter-bar-to-show {
+	from { transform: translateX(-75%) translateZ(10px); opacity: 0; }
+	to   { transform: translateX(0%) translateZ(10px);   opacity: 1; }
+}
+
+@-webkit-keyframes transition-slide-enter-bar-to-hide {
+	from { -webkit-transform: translateX(0%) translateZ(10px); opacity: 1; }
+	to   { -webkit-transform: translateX(75%) translateZ(10px); opacity: 0; }
+}
+@-moz-keyframes transition-slide-enter-bar-to-hide {
+	from { -moz-transform: translateX(0%) translateZ(10px); opacity: 1; }
+	to   { -moz-transform: translateX(75%) translateZ(10px); opacity: 0; }
+}
+@-ms-keyframes transition-slide-enter-bar-to-hide {
+	from { -ms-transform: translateX(0%) translateZ(10px); opacity: 1; }
+	to   { -ms-transform: translateX(75%) translateZ(10px); opacity: 0; }
+}
+@-o-keyframes transition-slide-enter-bar-to-hide {
+	from { -o-transform: translateX(0%) translateZ(10px); opacity: 1; }
+	to   { -o-transform: translateX(75%) translateZ(10px); opacity: 0; }
+}
+@keyframes transition-slide-enter-bar-to-hide {
+	from { transform: translateX(0%) translateZ(10px); opacity: 1; }
+	to   { transform: translateX(75%) translateZ(10px); opacity: 0; }
+}
+
+.transition-slide-enter .transition-view-to-show .bar .bar-item {
+	-webkit-animation: transition-slide-enter-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	   -moz-animation: transition-slide-enter-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	    -ms-animation: transition-slide-enter-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	     -o-animation: transition-slide-enter-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	        animation: transition-slide-enter-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	-webkit-transform: translateZ(10px);                         /* Important */
+	   -moz-transform: translateZ(10px);                         /* Important */
+	    -ms-transform: translateZ(10px);                         /* Important */
+	     -o-transform: translateZ(10px);                         /* Important */
+	        transform: translateZ(10px);                         /* Important */
+}
+
+.transition-slide-enter .transition-view-to-hide .bar .bar-item {
+	-webkit-animation: transition-slide-enter-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	   -moz-animation: transition-slide-enter-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	    -ms-animation: transition-slide-enter-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	     -o-animation: transition-slide-enter-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	        animation: transition-slide-enter-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	-webkit-transform: translateZ(10px);                         /* Important */
+	   -moz-transform: translateZ(10px);                         /* Important */
+	    -ms-transform: translateZ(10px);                         /* Important */
+	     -o-transform: translateZ(10px);                         /* Important */
+	        transform: translateZ(10px);                         /* Important */
+}
+
+/* Transition Slide (Leave)
+-----------------------------------------------------------------------------*/
+
+.transition-slide-leave .transition-view-to-show {
+	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+}
+
+.transition-slide-leave .transition-view-to-hide {
+	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+}
+
+/* Leave Navigation Bar View */
+
+@-webkit-keyframes transition-slide-leave-bar-to-show {
+	from { -webkit-transform: translateX(75%) translateZ(10px); opacity: 0; }
+	to   { -webkit-transform: translateX(0%) translateZ(10px);  opacity: 1; }
+}
+@-moz-keyframes transition-slide-leave-bar-to-show {
+	from { -moz-transform: translateX(75%) translateZ(10px); opacity: 0; }
+	to   { -moz-transform: translateX(0%) translateZ(10px);  opacity: 1; }
+}
+@-ms-keyframes transition-slide-leave-bar-to-show {
+	from { -ms-transform: translateX(75%) translateZ(10px); opacity: 0; }
+	to   { -ms-transform: translateX(0%) translateZ(10px);  opacity: 1; }
+}
+@-o-keyframes transition-slide-leave-bar-to-show {
+	from { -o-transform: translateX(75%) translateZ(10px); opacity: 0; }
+	to   { -o-transform: translateX(0%) translateZ(10px);  opacity: 1; }
+}
+@keyframes transition-slide-leave-bar-to-show {
+	from { transform: translateX(75%) translateZ(10px); opacity: 0; }
+	to   { transform: translateX(0%) translateZ(10px);  opacity: 1; }
+}
+
+@-webkit-keyframes transition-slide-leave-bar-to-hide {
+	from { -webkit-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+	to   { -webkit-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+}
+@-moz-keyframes transition-slide-leave-bar-to-hide {
+	from { -moz-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+	to   { -moz-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+}
+@-ms-keyframes transition-slide-leave-bar-to-hide {
+	from { -ms-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+	to   { -ms-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+}
+@-o-keyframes transition-slide-leave-bar-to-hide {
+	from { -o-transform: translateX(0%) translateZ(10px);   opacity: 1; }
+	to   { -o-transform: translateX(-75%) translateZ(10px); opacity: 0; }
+}
+@keyframes transition-slide-leave-bar-to-hide {
+	from { transform: translateX(0%) translateZ(10px);   opacity: 1; }
+	to   { transform: translateX(-75%) translateZ(10px); opacity: 0; }
+}
+
+.transition-slide-leave .transition-view-to-show .bar .bar-item {
+	-webkit-transform: translateZ(10px);
+	   -moz-transform: translateZ(10px);
+	    -ms-transform: translateZ(10px);
+	     -o-transform: translateZ(10px);
+	        transform: translateZ(10px);
+	-webkit-animation: transition-slide-leave-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	   -moz-animation: transition-slide-leave-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	    -ms-animation: transition-slide-leave-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	     -o-animation: transition-slide-leave-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	        animation: transition-slide-leave-bar-to-show 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+}
+
+.transition-slide-leave .transition-view-to-hide .bar .bar-item {
+	-webkit-transform: translateZ(10px);
+	   -moz-transform: translateZ(10px);
+	    -ms-transform: translateZ(10px);
+	     -o-transform: translateZ(10px);
+	        transform: translateZ(10px);
+	-webkit-animation: transition-slide-leave-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	   -moz-animation: transition-slide-leave-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	    -ms-animation: transition-slide-leave-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	     -o-animation: transition-slide-leave-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+	        animation: transition-slide-leave-bar-to-hide 400ms 1 cubic-bezier(0.5, 0.1, 0.5, 1.0);
+}
+
+/* Transition Cover Page (Enter)
+-----------------------------------------------------------------------------*/
+
+.transition-cover-page-foreground-view {
+	-webkit-box-shadow: 0px 0px 10px #000000;
+	   -moz-box-shadow: 0px 0px 10px #000000;
+	    -ms-box-shadow: 0px 0px 10px #000000;
+	     -o-box-shadow: 0px 0px 10px #000000;
+	        box-shadow: 0px 0px 10px #000000;
+	margin-left: auto;
+	margin-right: auto;
+	width: 768px;
+}

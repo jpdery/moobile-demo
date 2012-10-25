@@ -224,6 +224,10 @@ p {
 	background: rgba(255, 255, 255, 0.5);
 	border-radius: 8px;
 	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
 	font-size: 24px;
 	font-weight: normal;
 	height: 100%;
@@ -234,6 +238,10 @@ p {
 
 .view.component-scroll-view-grid-view .row {
 	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
 }
 
 .view.component-scroll-view-grid-view .page {

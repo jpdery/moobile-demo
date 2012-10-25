@@ -33,12 +33,6 @@ p {
 	text-align: center;
 }
 
-/* Home View
------------------------------------------------------------------------------*/
-
-
-
-
 /* Component View - Activity Indicator
 -----------------------------------------------------------------------------*/
 
@@ -75,7 +69,6 @@ p {
 .view.component-list-default-view {
 	background: #fff;
 }
-
 
 /* Component View - Slider
 -----------------------------------------------------------------------------*/
@@ -154,6 +147,7 @@ p {
 
 .view.component-scroll-view-h-paging-view .page,
 .view.component-scroll-view-v-paging-view .page {
+	-webkit-backface-visibility: hidden;
 	-webkit-box-orient: vertical;
 	-webkit-box-sizing: border-box;
 	-webkit-box-flex: 1;
@@ -174,6 +168,42 @@ p {
 	font-weight: normal;
 	height: 100%;
 	width: 100%;
+}
+
+/* Grid Paging */
+
+.view.component-scroll-view-grid-view .row {
+	display: -webkit-box;
+}
+
+.view.component-scroll-view-grid-view .page {
+	-webkit-backface-visibility: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-box-sizing: border-box;
+	-webkit-box-flex: 1;
+	display: -webkit-box;
+	height: 150px;
+	padding: 12px;
+	width: 150px;
+}
+
+.view.component-scroll-view-grid-view .page span {
+	-webkit-box-flex: 1;
+	-webkit-box-sizing: border-box;
+	-webkit-box-align: center;
+	-webkit-box-pack: center;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 8px;
+	display: -webkit-box;
+	font-size: 24px;
+	font-weight: normal;
+	height: 100%;
+	width: 100%;
+}
+
+.view.component-scroll-view-grid-view .row:nth-child(odd) .page:nth-child(even) span,
+.view.component-scroll-view-grid-view .row:nth-child(even) .page:nth-child(odd) span {
+	background: rgba(255, 255, 255, 0.25);
 }
 
 /* Transition View

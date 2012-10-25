@@ -29,6 +29,7 @@ sources:
   - "Source/ViewController/ViewController.Component.ScrollView.js"
   - "Source/ViewController/ViewController.Component.ScrollView.HPaging.js"
   - "Source/ViewController/ViewController.Component.ScrollView.VPaging.js"
+  - "Source/ViewController/ViewController.Component.ScrollView.Grid.js"
   - "Source/ViewController/ViewController.Component.Slider.js"
   - "Source/ViewController/ViewController.Button.js"
   - "Source/ViewController/ViewController.Bar.js"

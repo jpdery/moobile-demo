@@ -24,11 +24,13 @@ ViewController.Component.ScrollView.HPaging = new Class({
 	Extends: ViewController.Component,
 
 	options: {
-		style: 'default'
+		engine: 'IScroll'
 	},
 
 	loadView: function() {
+		console.log(this.options);
 		this.view = Moobile.ScrollView.at('templates/views/component-scroll-view-h-paging-view.html', {
+			scroller: this.options.engine,
 			scroll: 'horizontal',
 			scrollbar: 'none',
 			snapToPage: true,

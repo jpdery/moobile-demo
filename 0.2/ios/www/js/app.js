@@ -703,6 +703,8 @@ ViewController.Component.ScrollView = new Class({
 
 	Extends: ViewController.Component,
 
+	errorAlert: null,
+
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/component-scroll-view-view.html');
 	},
@@ -728,13 +730,49 @@ ViewController.Component.ScrollView = new Class({
 
 		var viewController = null;
 
-		switch (item.getName()) {
-			case 'h-paging':
-				viewController = new ViewController.Component.ScrollView.HPaging;
-				break;
-			case 'v-paging':
-				viewController = new ViewController.Component.ScrollView.VPaging;
-				break;
+		var name = item.getName();
+
+		var engine = null;
+		if (name.match('iscroll')) engine = 'IScroll';
+		if (name.match('native')) engine = 'Native';
+
+		try {
+
+			switch (name) {
+
+				case 'iscroll-h-paging':
+				case 'native-h-paging':
+					viewController = new ViewController.Component.ScrollView.HPaging({
+						engine: engine
+					});
+					break;
+
+				case 'iscroll-v-paging':
+				case 'native-v-paging':
+					viewController = new ViewController.Component.ScrollView.VPaging({
+						engine: engine
+					});
+					break;
+
+				case 'iscroll-grid':
+				case 'native-grid':
+					viewController = new ViewController.Component.ScrollView.Grid({
+						engine: engine
+					});
+					break;
+			}
+
+		} catch (e) {
+
+			if (this.errorAlert === null) {
+				this.errorAlert = new Moobile.Alert();
+				this.errorAlert.setTitle('Error');
+				this.errorAlert.setMessage('The selected engine is not available on this platform.');
+			}
+
+			this.errorAlert.showAnimated();
+
+			this.list.clearSelectedItem();
 		}
 
 		if (viewController) this.getViewControllerStack().pushViewController(viewController, new Moobile.ViewTransition.Slide);
@@ -768,11 +806,13 @@ ViewController.Component.ScrollView.HPaging = new Class({
 	Extends: ViewController.Component,
 
 	options: {
-		style: 'default'
+		engine: 'IScroll'
 	},
 
 	loadView: function() {
+		console.log(this.options);
 		this.view = Moobile.ScrollView.at('templates/views/component-scroll-view-h-paging-view.html', {
+			scroller: this.options.engine,
 			scroll: 'horizontal',
 			scrollbar: 'none',
 			snapToPage: true,
@@ -828,11 +868,12 @@ ViewController.Component.ScrollView.VPaging = new Class({
 	Extends: ViewController.Component,
 
 	options: {
-		style: 'default'
+		engine: 'IScroll'
 	},
 
 	loadView: function() {
 		this.view = Moobile.ScrollView.at('templates/views/component-scroll-view-v-paging-view.html', {
+			scroller: this.options.engine,
 			scroll: 'vertical',
 			scrollbar: 'none',
 			snapToPage: true,
@@ -851,6 +892,53 @@ ViewController.Component.ScrollView.VPaging = new Class({
 
 	update: function() {
 		this.view.getElements('.page').setStyle('height', this.view.getContentWrapperSize().y);
+	}
+
+});
+
+/*
+---
+
+name: ViewController.Component.ScrollView.Grid
+
+description:
+
+license:
+
+authors:
+	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+
+requires:
+	- ViewController.Component
+
+provides:
+	- ViewController.Component.ScrollView.Grid
+
+...
+*/
+
+ViewController.Component.ScrollView.Grid = new Class({
+
+	Extends: ViewController.Component,
+
+	options: {
+		engine: 'IScroll'
+	},
+
+	loadView: function() {
+		this.view = Moobile.ScrollView.at('templates/views/component-scroll-view-grid-view.html', {
+			scroller: this.options.engine,
+			scroll: 'both',
+			scrollbar: 'none',
+			snapToPage: true,
+			snapToPageSizeX: 150,
+			snapToPageSizeY: 150,
+		});
+	},
+
+	viewDidLoad: function() {
+		this.parent();
+		this.view.setContentSize(1500, 1500);
 	}
 
 });

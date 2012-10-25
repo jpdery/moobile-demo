@@ -19,6 +19,6 @@ provides:
 */
 
 var ViewController = {
-	Component: {
-	}
+	Component: {},
+	Event: {}
 };

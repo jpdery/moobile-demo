@@ -19,15 +19,15 @@ provides:
 */
 
 var ViewController = {
-	Component: {
-	}
+	Component: {},
+	Event: {}
 };
 
 
 /*
 ---
 
-name: ViewController.Component
+name: ViewController.Section
 
 description:
 
@@ -40,12 +40,12 @@ requires:
 	- Init
 
 provides:
-	- ViewController.Component
+	- ViewController.Section
 
 ...
 */
 
-ViewController.Component = new Class({
+ViewController.Section = new Class({
 
 	Extends: Moobile.ViewController,
 
@@ -81,7 +81,7 @@ authors:
 	- Your name
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Home
@@ -245,6 +245,177 @@ ViewController.Transition = new Class({
 /*
 ---
 
+name: ViewController.Event.Tap
+
+description:
+
+license:
+
+authors:
+	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+
+requires:
+	- ViewController.Section
+
+provides:
+	- ViewController.Event.Tap
+
+...
+*/
+
+ViewController.Event.Tap = new Class({
+
+	Extends: ViewController.Section,
+
+	zone: null,
+
+	loadView: function() {
+		this.view = Moobile.View.at('templates/views/event-tap-view.html');
+	},
+
+	viewDidLoad: function() {
+		this.parent();
+		this.zone = this.view.getElement('.zone');
+		this.zone.addEvent('tap', this.bound('onZoneTap'));
+		this.zone.addEvent('ownanimationend', this.bound('onZoneAnimationEnd'));
+	},
+
+	destroy: function() {
+		this.zone.removeEvent('tap', this.bound('onZoneTap'));
+		this.zone.removeEvent('ownanimationend', this.bound('onZoneAnimationEnd'));
+		this.zone = null;
+		this.parent();
+	},
+
+	onZoneTap: function() {
+		if (this.zone.hasClass('flash') === false) {
+			this.zone.addClass('flash');
+		}
+	},
+
+	onZoneAnimationEnd: function(e) {
+		this.zone.removeClass('flash');
+	}
+
+});
+
+/*
+---
+
+name: ViewController.Event.Swipe
+
+description:
+
+license:
+
+authors:
+	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+
+requires:
+	- ViewController.Section
+
+provides:
+	- ViewController.Event.Swipe
+
+...
+*/
+
+ViewController.Event.Swipe = new Class({
+
+	Extends: ViewController.Section,
+
+	zone: null,
+
+	loadView: function() {
+		this.view = Moobile.View.at('templates/views/event-swipe-view.html');
+	},
+
+	viewDidLoad: function() {
+		this.parent();
+		this.zone = this.view.getElement('.zone');
+		this.zone.addEvent('swipe', this.bound('onZoneSwipe'));
+		this.zone.addEvent('ownanimationend', this.bound('onZoneAnimationEnd'));
+	},
+
+	destroy: function() {
+		this.zone.removeEvent('swipe', this.bound('onZoneSwipe'));
+		this.zone.removeEvent('ownanimationend', this.bound('onZoneAnimationEnd'));
+		this.zone = null;
+		this.parent();
+	},
+
+	onZoneSwipe: function() {
+		if (this.zone.hasClass('flash') === false) {
+			this.zone.addClass('flash');
+		}
+	},
+
+	onZoneAnimationEnd: function(e) {
+		this.zone.removeClass('flash');
+	}
+
+});
+
+/*
+---
+
+name: ViewController.Event.Pinch
+
+description:
+
+license:
+
+authors:
+	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+
+requires:
+	- ViewController.Section
+
+provides:
+	- ViewController.Event.Pinch
+
+...
+*/
+
+ViewController.Event.Pinch = new Class({
+
+	Extends: ViewController.Section,
+
+	zone: null,
+
+	loadView: function() {
+		this.view = Moobile.View.at('templates/views/event-pinch-view.html');
+	},
+
+	viewDidLoad: function() {
+		this.parent();
+		this.zone = this.view.getElement('.zone');
+		this.zone.addEvent('pinch', this.bound('onZonePinch'));
+		this.zone.addEvent('ownanimationend', this.bound('onZoneAnimationEnd'));
+	},
+
+	destroy: function() {
+		this.zone.removeEvent('pinch', this.bound('onZonePinch'));
+		this.zone.removeEvent('ownanimationend', this.bound('onZoneAnimationEnd'));
+		this.zone = null;
+		this.parent();
+	},
+
+	onZonePinch: function() {
+		if (this.zone.hasClass('flash') === false) {
+			this.zone.addClass('flash');
+		}
+	},
+
+	onZoneAnimationEnd: function(e) {
+		this.zone.removeClass('flash');
+	}
+
+});
+
+/*
+---
+
 name: ViewController.Component.ActivityIndicator
 
 description:
@@ -255,7 +426,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.ActivityIndicator
@@ -265,7 +436,7 @@ provides:
 
 ViewController.Component.ActivityIndicator = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	activityIndicator: null,
 
@@ -318,7 +489,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Alert
@@ -328,7 +499,7 @@ provides:
 
 ViewController.Component.Alert = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	verticalLayoutButton: null,
 
@@ -401,7 +572,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Bar
@@ -411,7 +582,7 @@ provides:
 
 ViewController.Component.Bar = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/component-bar-view.html');
@@ -456,7 +627,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Bar.Style
@@ -466,7 +637,7 @@ provides:
 
 ViewController.Component.Bar.Style = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		style: 'default'
@@ -499,7 +670,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Button
@@ -509,7 +680,7 @@ provides:
 
 ViewController.Component.Button = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/component-button-view.html');
@@ -553,7 +724,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Button.Style
@@ -563,7 +734,7 @@ provides:
 
 ViewController.Component.Button.Style = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		style: 'default'
@@ -596,7 +767,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.List
@@ -606,7 +777,7 @@ provides:
 
 ViewController.Component.List = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	list: null,
 
@@ -653,7 +824,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.List.Style
@@ -663,7 +834,7 @@ provides:
 
 ViewController.Component.List.Style = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		style: 'default'
@@ -688,7 +859,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.ScrollView
@@ -701,7 +872,7 @@ if (!window.ViewController.Component) window.ViewController.Component = {};
 
 ViewController.Component.ScrollView = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	errorAlert: null,
 
@@ -793,7 +964,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.ScrollView.HPaging
@@ -803,7 +974,7 @@ provides:
 
 ViewController.Component.ScrollView.HPaging = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		engine: 'IScroll'
@@ -855,7 +1026,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.ScrollView.VPaging
@@ -865,7 +1036,7 @@ provides:
 
 ViewController.Component.ScrollView.VPaging = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		engine: 'IScroll'
@@ -909,7 +1080,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.ScrollView.Grid
@@ -919,7 +1090,7 @@ provides:
 
 ViewController.Component.ScrollView.Grid = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		engine: 'IScroll'
@@ -956,7 +1127,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Slider
@@ -966,7 +1137,7 @@ provides:
 
 ViewController.Component.Slider = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	hSlider: null,
 
@@ -1008,419 +1179,6 @@ ViewController.Component.Slider = new Class({
 
 	onVerticalSliderChange: function(value) {
 		this.vValue.setText(Math.round(value));
-	}
-
-});
-
-/*
----
-
-name: ViewController.Button
-
-description:
-
-license:
-
-authors:
-	- Your name
-
-requires:
-
-provides:
-	- ViewController.Button
-
-...
-*/
-
-if (!window.ViewController) window.ViewController = {};
-
-ViewController.Button = new Class({
-
-	Extends: Moobile.ViewController,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBar: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBarItem: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	backButton: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	tempButton: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	styleList: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	loadView: function() {
-		this.view = Moobile.View.at('templates/views/control-button-view.html');
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	viewDidLoad: function() {
-
-		this.navigationBar = this.view.getChildComponent('navigation-bar');
-		this.navigationBarItem = this.navigationBar.getItem();
-
-		this.tempButton = this.navigationBarItem.getChildComponent('temp-button');
-		this.backButton = this.navigationBarItem.getChildComponent('back-button');
-		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
-
-		this.styleList = this.view.getChildComponent('style-list');
-		this.styleList.addEvent('select', this.bound('onStyleListSelect'));
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	destroy: function() {
-
-		this.navigationBar = null;
-		this.navigationBarItem = null;
-
-		this.backButton.removeEvent('tap', this.bound('onBackButtonTap'));
-		this.backButton = null;
-		this.tempButton = null;
-
-		this.styleList.removeEvent('select', this.bound('onStyleListSelect'));
-		this.styleList = null;
-
-		this.parent();
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	onBackButtonTap: function() {
-		this.getViewControllerStack().popViewController();
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	onStyleListSelect: function(item) {
-		this.tempButton.setStyle(item.getName());
-	}
-
-});
-
-/*
----
-
-name: ViewController.Bar
-
-description:
-
-license:
-
-authors:
-	- Your name
-
-requires:
-
-provides:
-	- ViewController.Bar
-
-...
-*/
-
-if (!window.ViewController) window.ViewController = {};
-
-/**
- * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
- * @since  0.1.0
- */
-ViewController.Bar = new Class({
-
-	Extends: Moobile.ViewController,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBar: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBarItem: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	backButton: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	styleList: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	loadView: function() {
-		this.view = Moobile.View.at('templates/views/control-bar-view.html');
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	viewDidLoad: function() {
-
-		this.navigationBar = this.view.getChildComponent('navigation-bar');
-		this.navigationBarItem = this.navigationBar.getItem();
-
-		this.backButton = this.navigationBarItem.getChildComponent('back-button');
-		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
-
-		this.styleList = this.view.getChildComponent('style-list');
-		this.styleList.addEvent('select', this.bound('onStyleListSelect'));
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	destroy: function() {
-
-		this.navigationBar = null;
-		this.navigationBarItem = null;
-
-		this.backButton.removeEvent('tap', this.bound('onBackButtonTap'));
-		this.backButton = null;
-
-		this.styleList.removeEvent('select', this.bound('onStyleListSelect'));
-		this.styleList = null;
-
-		this.parent();
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	onBackButtonTap: function() {
-		this.getViewControllerStack().popViewController();
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	onStyleListSelect: function(item) {
-		this.navigationBar.setStyle(item.getName());
-	}
-
-});
-
-/*
----
-
-name: ViewController.List
-
-description:
-
-license:
-
-authors:
-	- Your name
-
-requires:
-	- ViewController.Component
-
-provides:
-	- ViewController.List
-
-...
-*/
-
-if (!window.ViewController) window.ViewController = {};
-
-ViewController.List = new Class({
-
-	Extends: Moobile.ViewController,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBar: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBarItem: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	backButton: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	loadView: function() {
-		this.view = Moobile.View.at('templates/views/control-list-view.html');
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	viewDidLoad: function() {
-
-		this.navigationBar = this.view.getChildComponent('navigation-bar');
-		this.navigationBarItem = this.navigationBar.getItem();
-
-		this.backButton = this.navigationBarItem.getChildComponent('back-button');
-		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	destroy: function() {
-
-		this.navigationBar = null;
-		this.navigationBarItem = null;
-
-		this.backButton.removeEvent('tap', this.bound('onBackButtonTap'));
-		this.backButton = null;
-
-		this.parent();
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	onBackButtonTap: function() {
-		this.getViewControllerStack().popViewController();
-	}
-
-});
-
-/*
----
-
-name: ViewController.Slider
-
-description:
-
-license:
-
-authors:
-	- Your name
-
-requires:
-
-provides:
-	- ViewController.Slider
-
-...
-*/
-
-if (!window.ViewController) window.ViewController = {};
-
-ViewController.Slider = new Class({
-
-	Extends: Moobile.ViewController,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBar: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	navigationBarItem: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	backButton: null,
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	loadView: function() {
-		this.view = Moobile.View.at('templates/views/control-slider-view.html');
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	viewDidLoad: function() {
-
-		this.navigationBar = this.view.getChildComponent('navigation-bar');
-		this.navigationBarItem = this.navigationBar.getItem();
-
-		this.backButton = this.navigationBarItem.getChildComponent('back-button');
-		this.backButton.addEvent('tap', this.bound('onBackButtonTap'));
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	destroy: function() {
-
-		this.navigationBar = null;
-		this.navigationBarItem = null;
-
-		this.backButton.removeEvent('tap', this.bound('onBackButtonTap'));
-		this.backButton = null;
-
-		this.parent();
-	},
-
-	/**
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	onBackButtonTap: function() {
-		this.getViewControllerStack().popViewController();
 	}
 
 });

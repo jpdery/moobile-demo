@@ -11,7 +11,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Bar
@@ -21,7 +21,7 @@ provides:
 
 ViewController.Component.Bar = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/component-bar-view.html');

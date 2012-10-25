@@ -11,7 +11,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Alert
@@ -21,7 +21,7 @@ provides:
 
 ViewController.Component.Alert = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	verticalLayoutButton: null,
 

@@ -11,7 +11,7 @@ authors:
 	- Your name
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Home

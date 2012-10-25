@@ -1,7 +1,7 @@
 /*
 ---
 
-name: ViewController.Component
+name: ViewController.Section
 
 description:
 
@@ -14,12 +14,12 @@ requires:
 	- Init
 
 provides:
-	- ViewController.Component
+	- ViewController.Section
 
 ...
 */
 
-ViewController.Component = new Class({
+ViewController.Section = new Class({
 
 	Extends: Moobile.ViewController,
 

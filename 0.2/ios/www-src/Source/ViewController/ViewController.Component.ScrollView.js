@@ -11,7 +11,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.ScrollView
@@ -24,7 +24,7 @@ if (!window.ViewController.Component) window.ViewController.Component = {};
 
 ViewController.Component.ScrollView = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	errorAlert: null,
 

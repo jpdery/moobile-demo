@@ -38,7 +38,15 @@ p {
 
 .view.component-activity-indicator-view .component-activity-indicator-view-content {
 	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
 	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
 }
 
 .view.component-activity-indicator-view .start-button,
@@ -80,6 +88,10 @@ p {
 .view.component-slider-view .h-value,
 .view.component-slider-view .v-value {
 	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	     -o-box-sizing: border-box;
+	        box-sizing: border-box;
 	background: rgba(255, 255, 255, 0.5);
 	border-radius: 8px;
 	font-size: 24px;
@@ -102,6 +114,10 @@ p {
 
 .view.component-slider-view .h-slider {
 	-webkit-box-orient: vertical;
+	   -moz-box-orient: vertical;
+	    -ms-box-orient: vertical;
+	     -o-box-orient: vertical;
+	        box-orient: vertical;
 }
 
 .view.component-slider-view .h-slider .h-value {
@@ -112,6 +128,10 @@ p {
 
 .view.component-slider-view .v-slider {
 	-webkit-box-orient: horizontal;
+	   -moz-box-orient: horizontal;
+	    -ms-box-orient: horizontal;
+	     -o-box-orient: horizontal;
+	        box-orient: horizontal;
 }
 
 .view.component-slider-view .v-slider .slider {
@@ -129,7 +149,7 @@ p {
 	height: 150px;
 }
 
-/* Component View -  Button
+/* Component View - Button
 -----------------------------------------------------------------------------*/
 
 .view.component-button-view .component-button-view-content {
@@ -143,24 +163,64 @@ p {
 /* Component View - ScrollView
 -----------------------------------------------------------------------------*/
 
+.view.component-scroll-view-view .list {
+	margin-bottom: 0px;
+}
+
 /* Horizontal Vertical Paging */
 
 .view.component-scroll-view-h-paging-view .page,
 .view.component-scroll-view-v-paging-view .page {
 	-webkit-backface-visibility: hidden;
+	   -moz-backface-visibility: hidden;
+	    -ms-backface-visibility: hidden;
+	     -o-backface-visibility: hidden;
+	        backface-visibility: hidden;
 	-webkit-box-orient: vertical;
+	   -moz-box-orient: vertical;
+	    -ms-box-orient: vertical;
+	     -o-box-orient: vertical;
+	        box-orient: vertical;
 	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	     -o-box-sizing: border-box;
+	        box-sizing: border-box;
 	-webkit-box-flex: 1;
+	   -moz-box-flex: 1;
+	    -ms-box-flex: 1;
+	     -o-box-flex: 1;
+	        box-flex: 1;
 	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
 	padding: 12px;
 }
 
 .view.component-scroll-view-h-paging-view .page span,
 .view.component-scroll-view-v-paging-view .page span {
-	-webkit-box-flex: 1;
 	-webkit-box-sizing: border-box;
-	-webkit-box-align: center;
+	   -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	     -o-box-sizing: border-box;
+	        box-sizing: border-box;
+	-webkit-box-flex: 1;
+	   -moz-box-flex: 1;
+	    -ms-box-flex: 1;
+	     -o-box-flex: 1;
+	        box-flex: 1;
 	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
+	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
 	background: rgba(255, 255, 255, 0.5);
 	border-radius: 8px;
 	display: -webkit-box;
@@ -177,24 +237,59 @@ p {
 }
 
 .view.component-scroll-view-grid-view .page {
-	-webkit-backface-visibility: hidden;
 	-webkit-box-orient: vertical;
+	   -moz-box-orient: vertical;
+	    -ms-box-orient: vertical;
+	     -o-box-orient: vertical;
+	        box-orient: vertical;
 	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	     -o-box-sizing: border-box;
+	        box-sizing: border-box;
 	-webkit-box-flex: 1;
+	   -moz-box-flex: 1;
+	    -ms-box-flex: 1;
+	     -o-box-flex: 1;
+	        box-flex: 1;
 	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
 	height: 150px;
 	padding: 12px;
 	width: 150px;
 }
 
 .view.component-scroll-view-grid-view .page span {
-	-webkit-box-flex: 1;
 	-webkit-box-sizing: border-box;
-	-webkit-box-align: center;
+	   -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	     -o-box-sizing: border-box;
+	        box-sizing: border-box;
+	-webkit-box-flex: 1;
+	   -moz-box-flex: 1;
+	    -ms-box-flex: 1;
+	     -o-box-flex: 1;
+	        box-flex: 1;
 	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
+	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
 	background: rgba(255, 255, 255, 0.5);
 	border-radius: 8px;
 	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
 	font-size: 24px;
 	font-weight: normal;
 	height: 100%;
@@ -211,7 +306,101 @@ p {
 
 .view.transition-view .transition-view-content {
 	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
 	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
 	padding: 12px;
+}
+
+/* Event View
+-----------------------------------------------------------------------------*/
+
+@-webkit-keyframes flash {
+	from { -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+	to   { -webkit-transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+@-moz-keyframes flash {
+	from { -moz-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+	to   { -moz-transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+@-ms-keyframes flash {
+	from { -ms-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+	to   { -ms-transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+@-o-keyframes flash {
+	from { -o-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+	to   { -o-transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+@keyframes flash {
+	from { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+	to   { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+
+
+.view.event-tap-view .event-tap-view-content,
+.view.event-pinch-view .event-pinch-view-content,
+.view.event-swipe-view .event-swipe-view-content {
+	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
+	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
+	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+	-webkit-perspective: 800;
+	   -moz-perspective: 800;
+	    -ms-perspective: 800;
+	     -o-perspective: 800;
+	        perspective: 800;
+}
+
+.view.event-tap-view .event-tap-view-content .zone,
+.view.event-pinch-view .event-pinch-view-content .zone,
+.view.event-swipe-view .event-swipe-view-content .zone {
+	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
+	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 8px;
+	display: -webkit-box;
+	display:    -moz-box;
+	display:     -ms-box;
+	display:      -o-box;
+	display:         box;
+	padding: 12px;
+	text-align: center;
+	height: 50%;
+	width: 50%;
+}
+
+.view.event-tap-view .event-tap-view-content .zone.flash,
+.view.event-pinch-view .event-pinch-view-content .zone.flash,
+.view.event-swipe-view .event-swipe-view-content .zone.flash {
+	-webkit-animation: flash 2s cubic-bezier(0.5, 0.1, 0.5, 1);
+	   -moz-animation: flash 2s cubic-bezier(0.5, 0.1, 0.5, 1);
+	    -ms-animation: flash 2s cubic-bezier(0.5, 0.1, 0.5, 1);
+	     -o-animation: flash 2s cubic-bezier(0.5, 0.1, 0.5, 1);
+	        animation: flash 2s cubic-bezier(0.5, 0.1, 0.5, 1);
 }
 

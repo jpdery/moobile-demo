@@ -11,7 +11,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Button
@@ -21,7 +21,7 @@ provides:
 
 ViewController.Component.Button = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	loadView: function() {
 		this.view = Moobile.View.at('templates/views/component-button-view.html');

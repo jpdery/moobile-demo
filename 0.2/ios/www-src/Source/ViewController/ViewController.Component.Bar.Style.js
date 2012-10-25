@@ -11,7 +11,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Bar.Style
@@ -21,7 +21,7 @@ provides:
 
 ViewController.Component.Bar.Style = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	options: {
 		style: 'default'

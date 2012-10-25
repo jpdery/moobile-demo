@@ -11,7 +11,7 @@ authors:
 	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 
 requires:
-	- ViewController.Component
+	- ViewController.Section
 
 provides:
 	- ViewController.Component.Slider
@@ -21,7 +21,7 @@ provides:
 
 ViewController.Component.Slider = new Class({
 
-	Extends: ViewController.Component,
+	Extends: ViewController.Section,
 
 	hSlider: null,
 

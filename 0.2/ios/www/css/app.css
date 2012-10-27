@@ -71,6 +71,24 @@ p {
 	padding: 10px 9px;
 }
 
+/* Component View - Bar
+-----------------------------------------------------------------------------*/
+
+.view.component-bar-default-view .component-bar-default-view-content,
+.view.component-bar-light-view .component-bar-light-view-content,
+.view.component-bar-dark-view .component-bar-dark-view-content {
+	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
+	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
+}
+
 /* Component View - List
 -----------------------------------------------------------------------------*/
 
@@ -158,6 +176,27 @@ p {
 
 .view.component-button-view .list {
 	padding: 0px;
+}
+
+
+.view.component-button-bar-dark-view .bar .button.style-back,
+.view.component-button-bar-light-view .bar .button.style-back {
+	width: 60px;
+}
+
+
+.view.component-button-bar-dark-view .component-button-bar-dark-view-content,
+.view.component-button-bar-light-view .component-button-bar-light-view-content {
+	-webkit-box-pack: center;
+	   -moz-box-pack: center;
+	    -ms-box-pack: center;
+	     -o-box-pack: center;
+	        box-pack: center;
+	-webkit-box-align: center;
+	   -moz-box-align: center;
+	    -ms-box-align: center;
+	     -o-box-align: center;
+	        box-align: center;
 }
 
 /* Component View - ScrollView

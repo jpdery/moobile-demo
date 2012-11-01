@@ -186,7 +186,8 @@ p {
 
 
 .view.component-button-bar-dark-view .component-button-bar-dark-view-content,
-.view.component-button-bar-light-view .component-button-bar-light-view-content {
+.view.component-button-bar-light-view .component-button-bar-light-view-content,
+.view.component-button-bar-default-view .component-button-bar-default-view-content {
 	-webkit-box-pack: center;
 	   -moz-box-pack: center;
 	    -ms-box-pack: center;

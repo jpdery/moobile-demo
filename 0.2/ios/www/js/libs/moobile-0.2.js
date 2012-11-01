@@ -1,5 +1,5 @@
 /*!
- * iScroll v4.2.2 ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org
+ * iScroll v4.2.5 ~ Copyright (c) 2012 Matteo Spinelli, http://cubiq.org
  * Released under MIT license, http://cubiq.org/license
  */
 (function(window, doc){
@@ -37,7 +37,7 @@ var m = Math,
 
     has3d = prefixStyle('perspective') in dummyStyle,
     hasTouch = 'ontouchstart' in window && !isTouchPad,
-    hasTransform = !!vendor,
+    hasTransform = vendor !== false,
     hasTransitionEnd = prefixStyle('transition') in dummyStyle,
 
 	RESIZE_EV = 'onorientationchange' in window ? 'orientationchange' : 'resize',
@@ -45,7 +45,6 @@ var m = Math,
 	MOVE_EV = hasTouch ? 'touchmove' : 'mousemove',
 	END_EV = hasTouch ? 'touchend' : 'mouseup',
 	CANCEL_EV = hasTouch ? 'touchcancel' : 'mouseup',
-	WHEEL_EV = vendor == 'Moz' ? 'DOMMouseScroll' : 'mousewheel',
 	TRNEND_EV = (function () {
 		if ( vendor === false ) return false;
 
@@ -177,8 +176,10 @@ var m = Math,
 		that._bind(RESIZE_EV, window);
 		that._bind(START_EV);
 		if (!hasTouch) {
-			if (that.options.wheelAction != 'none')
-				that._bind(WHEEL_EV);
+			if (that.options.wheelAction != 'none') {
+				that._bind('DOMMouseScroll');
+				that._bind('mousewheel');
+			}
 		}
 
 		if (that.options.checkDOMChanges) that.checkDOMTime = setInterval(function () {
@@ -209,7 +210,7 @@ iScroll.prototype = {
 			case END_EV:
 			case CANCEL_EV: that._end(e); break;
 			case RESIZE_EV: that._resize(); break;
-			case WHEEL_EV: that._wheel(e); break;
+			case 'DOMMouseScroll': case 'mousewheel': that._wheel(e); break;
 			case TRNEND_EV: that._transitionEnd(e); break;
 		}
 	},
@@ -375,8 +376,8 @@ iScroll.prototype = {
 			if (that.options.useTransform) {
 				// Very lame general purpose alternative to CSSMatrix
 				matrix = getComputedStyle(that.scroller, null)[transform].replace(/[^0-9\-.,]/g, '').split(',');
-				x = +matrix[4];
-				y = +matrix[5];
+				x = +(matrix[12] || matrix[4]);
+				y = +(matrix[13] || matrix[5]);
 			} else {
 				x = +getComputedStyle(that.scroller, null).left.replace(/[^0-9-]/g, '');
 				y = +getComputedStyle(that.scroller, null).top.replace(/[^0-9-]/g, '');
@@ -890,7 +891,8 @@ iScroll.prototype = {
 		that._unbind(CANCEL_EV, window);
 		
 		if (!that.options.hasTouch) {
-			that._unbind(WHEEL_EV);
+			that._unbind('DOMMouseScroll');
+			that._unbind('mousewheel');
 		}
 		
 		if (that.options.useTransition) that._unbind(TRNEND_EV);
@@ -1100,6 +1102,7 @@ if (typeof exports !== 'undefined') exports.iScroll = iScroll;
 else window.iScroll = iScroll;
 
 })(window, document);
+
 
 /*
 ---
@@ -1709,7 +1712,7 @@ provides:
 ...
 */
 
-Browser.Platform.cordova = window.Cordova && Browser.isMobile && !Browser.safari;
+Browser.Platform.cordova = (window.Phonegap || window.Cordova || window.cordova) && Browser.isMobile && !Browser.safari;
 
 
 /*
@@ -2275,7 +2278,7 @@ Moobile.Component = new Class({
 
 		var name = type.split(':')[0];
 
-		if (Moobile.Component.hasNativeEvent(name)) {
+		if (this.eventIsNative(name)) {
 
 			var self = this;
 			var listeners = this._events.listeners;
@@ -2302,7 +2305,7 @@ Moobile.Component = new Class({
 	 */
 	removeEvent: function(type, fn) {
 
-		if (Moobile.Component.hasNativeEvent(type)) {
+		if (Moobile.Component.hasNativeEvent(type) && this.eventIsNative(type)) {
 			var listeners = this._events.listeners;
 			var callbacks = this._events.callbacks;
 			if (callbacks[type] && callbacks[type].contains(fn)) {
@@ -2316,6 +2319,15 @@ Moobile.Component = new Class({
 		}
 
 		return this.parent(type, fn);
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Component/Component#eventIsNative
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	eventIsNative: function(name) {
+		return Moobile.Component.hasNativeEvent(name);
 	},
 
 	/**
@@ -2405,7 +2417,16 @@ Moobile.Component = new Class({
 	 * @since  0.1.0
 	 */
 	getChildComponentOfType: function(type, name) {
-		return this._children.find(function(child) { return child instanceof type && child.getName() === name; });
+
+		var types = Array.from(type);
+
+		var by = function(child) {
+			return types.some(function(type) {
+				return child instanceof type && child.getName() === name;
+			});
+		};
+
+		return this._children.find(by);
 	},
 
 	/**
@@ -2476,10 +2497,20 @@ Moobile.Component = new Class({
 	/**
 	 * @see    http://moobilejs.com/doc/latest/Component/Component#getChildComponentsOfType
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @edited 0.2.0
 	 * @since  0.1.0
 	 */
 	getChildComponentsOfType: function(type) {
-		return this._children.filter(function(child) { return child instanceof type });
+
+		var types = Array.from(type);
+
+		var by = function(child) {
+			return types.some(function(type) {
+				return child instanceof type;
+			});
+		};
+
+		return this._children.filter(by);
 	},
 
 	/**
@@ -2512,7 +2543,8 @@ Moobile.Component = new Class({
 	    var component = this.getChildComponent(name);
 	    if (component === null) {
 	    	for (var i = 0, len = this._children.length; i < len; i++) {
-	    		return this._children[i].getDescendantComponent(name);
+	    		var found = this._children[i].getDescendantComponent(name);
+	    		if (found) return found;
 	    	}
 	    }
 
@@ -2757,8 +2789,8 @@ Moobile.Component = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	hasStyle: function(style) {
-		return this._style ? this._style.name === style : false;
+	hasStyle: function(name) {
+		return this._style ? this._style.name === name : false;
 	},
 
 	/**
@@ -2917,8 +2949,8 @@ Moobile.Component = new Class({
 
 		this.willShow();
 		this._visible = true;
-		this.element.show();
 		this.element.removeClass('hidden');
+		this._children.invoke('show');
 		this.didShow();
 
 		return this.fireEvent('show');
@@ -2936,8 +2968,8 @@ Moobile.Component = new Class({
 
 		this.willHide();
 		this._visible = false;
-		this.element.hide();
 		this.element.addClass('hidden');
+		this._children.invoke('hide');
 		this.didHide();
 
 		return this.fireEvent('hide');
@@ -3104,7 +3136,231 @@ Moobile.Component = new Class({
 
 	toElement: function() {
 		return this.element;
+	},
+
+	// <0.1-compat>
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	addChild: function() {
+		console.log('[DEPRECATION NOTICE] The method "addChild" will be removed in 0.3, use the method "addChildComponent" instead');
+		return this.addChildComponent.apply(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	addChildInside: function() {
+		console.log('[DEPRECATION NOTICE] The method "addChildInside" will be removed in 0.3, use the method "addChildComponentInside" instead');
+		return this.addChildComponentInside.apply(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	addChildAfter: function() {
+		console.log('[DEPRECATION NOTICE] The method "addChildAfter" will be removed in 0.3, use the method "addChildComponentAfter" instead');
+		return this.addChildComponentAfter.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	addChildBefore: function() {
+		console.log('[DEPRECATION NOTICE] The method "addChildBefore" will be removed in 0.3, use the method "addChildComponentBefore" instead');
+		return this.addChildComponentBefore.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChild: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChild" will be removed in 0.3, use the method "getChildComponent" instead');
+		return this.getChildComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChildOfType: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChildOfType" will be removed in 0.3, use the method "getChildComponentOfType" instead');
+		return this.getChildComponentOfType.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChildAt: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChildAt" will be removed in 0.3, use the method "getChildComponentAt" instead');
+		return this.getChildComponentAt.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChildOfTypeAt: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChildOfTypeAt" will be removed in 0.3, use the method "getChildComponentOfTypeAt" instead');
+		return this.getChildComponentOfTypeAt.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChildIndex: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChildIndex" will be removed in 0.3, use the method "getChildComponentIndex" instead');
+		return this.getChildComponentIndex.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChildren: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChildren" will be removed in 0.3, use the method "getChildComponents" instead');
+		return this.getChildComponents.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getChildrenOfType: function() {
+		console.log('[DEPRECATION NOTICE] The method "getChildrenOfType" will be removed in 0.3, use the method "getChildComponentsOfType" instead');
+		return this.getChildComponentsOfType.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	hasChild: function() {
+		console.log('[DEPRECATION NOTICE] The method "hasChild" will be removed in 0.3, use the method "hasChildComponent" instead');
+		return this.hasChildComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	hasChildOfType: function() {
+		console.log('[DEPRECATION NOTICE] The method "hasChildOfType" will be removed in 0.3, use the method "hasChildComponentOfType" instead');
+		return this.hasChildComponentOfType.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	replaceChild: function() {
+		console.log('[DEPRECATION NOTICE] The method "replaceChild" will be removed in 0.3, use the method "replaceChildComponent" instead');
+		return this.replaceChildComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	replaceWith: function() {
+		console.log('[DEPRECATION NOTICE] The method "replaceWith" will be removed in 0.3, use the method "replaceWithComponent" instead');
+		return this.replaceWithComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	removeChild: function() {
+		console.log('[DEPRECATION NOTICE] The method "removeChild" will be removed in 0.3, use the method "removeChildComponent" instead');
+		return this.removeChildComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	removeChildren: function() {
+		console.log('[DEPRECATION NOTICE] The method "removeChildren" will be removed in 0.3, use the method "removeAllChildComponents" instead');
+		return this.removeAllChildComponents.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	removeChildrenOfType: function() {
+		console.log('[DEPRECATION NOTICE] The method "removeChildrenOfType" will be removed in 0.3, use the method "removeAllChildComponentsOfType" instead');
+		return this.removeAllChildComponentsOfType.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	removeFromParent: function() {
+		console.log('[DEPRECATION NOTICE] The method "removeFromParent" will be removed in 0.3, use the method "removeFromParentComponent" instead');
+		return this.removeFromParentComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	setParent: function() {
+		console.log('[DEPRECATION NOTICE] The method "setParent" will be removed in 0.3, use the method "setParentComponent" instead');
+		return this.setParentComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getParent: function() {
+		console.log('[DEPRECATION NOTICE] The method "getParent" will be removed in 0.3, use the method "getParentComponent" instead');
+		return this.getParentComponent.call(this, arguments);
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	hasParent: function() {
+		console.log('[DEPRECATION NOTICE] The method "hasParent" will be removed in 0.3, use the "hasParentComponent" instead');
+		return this.hasParentComponent.apply(this, arguments);
 	}
+
+	// </0.1-compat>
 
 });
 
@@ -3121,20 +3377,23 @@ Moobile.Component.defineRole = function(name, context, options, handler) {
 	 	context.__roles__ = {};
 	}
 
-	if (typeof options === 'function') {
-		handler = options;
-		options = {};
-	}
+	if (options) {
 
-	// <0.1-compat>
-	if (typeof handler === 'object') {
-		options.traversable = handler.traversable;
-		handler = handler.behavior;
+		switch (typeof options) {
+
+			case 'function':
+				handler = options;
+				options = {};
+				break;
+
+			case 'object':
+				if (typeof options.behavior === 'function') handler = options.behavior;
+				break;
+		}
 	}
-	// </0.1-compat>
 
 	context.__roles__[name] = {
-		handler: handler || function(){},
+		handler: handler || function() {},
 		options: options || {}
 	};
 };
@@ -3145,8 +3404,8 @@ Moobile.Component.defineRole = function(name, context, options, handler) {
  * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
  * @since  0.2.0
  */
-Moobile.Component.defineAttribute = function(name, target, handler) {
-	var context = (target || Moobile.Component).prototype;
+Moobile.Component.defineAttribute = function(name, context, handler) {
+	context = (context || Moobile.Component).prototype;
 	if (context.__attributes__ === undefined) {
 		context.__attributes__ = {};
 	}
@@ -3187,14 +3446,14 @@ Moobile.Component.getStyle = function(name, target) {
  * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
  * @since  0.1.0
  */
-Moobile.Component.create = function(klass, element, descriptor) {
+Moobile.Component.create = function(klass, element, descriptor, options, name) {
 
 	element = Element.from(element);
 
 	if (descriptor) {
 		var subclass = element.get(descriptor);
 		if (subclass) {
-			var instance = Class.instantiate(subclass, element);
+			var instance = Class.instantiate(subclass, element, options, name);
 			if (instance instanceof klass) {
 				return instance;
 			}
@@ -3296,9 +3555,9 @@ Moobile.Control = new Class({
 
 		if (this.shouldAllowState(state) || state == null) {
 			this.willChangeState(state)
-			if (this._state) this.element.removeClass('is-' + this._state);
+			if (this._state) this.removeClass('is-' + this._state);
 			this._state = state;
-			if (this._state) this.element.addClass('is-' + this._state);
+			if (this._state) this.addClass('is-' + this._state);
 			this.didChangeState(state)
 		}
 
@@ -3453,7 +3712,7 @@ Moobile.Button = new Class({
 
 		this.parent();
 
-		this.element.addClass('button');
+		this.addClass('button');
 
 		var label = this.getRoleElement('label');
 		if (label === null) {
@@ -3489,10 +3748,7 @@ Moobile.Button = new Class({
 		if (this._label === label)
 			return this;
 
-		label = label || '';
-		if (typeof label === 'string') {
-			label = new Moobile.Text().setText(label);
-		}
+		label = Moobile.Text.from(label);
 
 		if (this._label) {
 			this._label.replaceWithComponent(label, true);
@@ -3502,8 +3758,7 @@ Moobile.Button = new Class({
 
 		this._label = label;
 		this._label.addClass('button-label');
-
-		this.element.toggleClass('no-button-label', this._label.isEmpty());
+		this.toggleClass('button-label-empty', this._label.isEmpty());
 
 		return this;
 	},
@@ -3536,6 +3791,18 @@ Moobile.Button = new Class({
 	}
 
 });
+
+/**
+ * @see    http://moobilejs.com/doc/latest/Control/Button#from
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.2.0
+ */
+Moobile.Button.from = function(source) {
+	if (source instanceof Moobile.Button) return source;
+	var button = new Moobile.Button();
+	button.setLabel(source);
+	return button;
+};
 
 //------------------------------------------------------------------------------
 // Roles
@@ -3631,7 +3898,7 @@ Moobile.ButtonGroup = new Class({
 	 * @since  0.1.0
 	 */
 	options: {
-		layout: null,
+		layout: 'horizontal',
 		selectable: true,
 		selectedButtonIndex: -1
 	},
@@ -3646,11 +3913,11 @@ Moobile.ButtonGroup = new Class({
 
 		this.parent();
 
-		this.element.addClass('button-group');
+		this.addClass('button-group');
 
 		var layout = this.options.layout;
 		if (layout) {
-			this.element.addClass('button-group-layout-' + layout);
+			this.addClass('button-group-layout-' + layout);
 		}
 	},
 
@@ -3757,7 +4024,7 @@ Moobile.ButtonGroup = new Class({
 	 * @since  0.1.0
 	 */
 	addButton: function(button, where) {
-		return this.addChildComponent(button, where);
+		return this.addChildComponent(Moobile.Button.from(button), where);
 	},
 
 	/**
@@ -3766,7 +4033,7 @@ Moobile.ButtonGroup = new Class({
 	 * @since  0.1.0
 	 */
 	addButtonAfter: function(button, after) {
-		return this.addChildComponentAfter(button, after);
+		return this.addChildComponentAfter(Moobile.Button.from(button), after);
 	},
 
 	/**
@@ -3775,7 +4042,7 @@ Moobile.ButtonGroup = new Class({
 	 * @since  0.1.0
 	 */
 	addButtonBefore: function(button, before) {
-		return this.addChildComponentBefore(button, before);
+		return this.addChildComponentBefore(Moobile.Button.from(button), before);
 	},
 
 	/**
@@ -3958,7 +4225,7 @@ Moobile.Bar = new Class({
 
 		this.parent();
 
-		this.element.addClass('bar');
+		this.addClass('bar');
 
 		var item = this.getRoleElement('item');
 		if (item === null) {
@@ -4030,10 +4297,10 @@ Moobile.Component.defineStyle('dark', Moobile.Bar, {
 	detach: function(element) { element.removeClass('style-dark'); }
 });
 
-/* Contextual Style - Android */
-Moobile.Component.defineStyle('contextual', Moobile.Bar, {
-	attach: function(element) { element.addClass('style-contextual'); },
-	detach: function(element) { element.removeClass('style-contextual'); }
+/* Light Style - iOS - Android */
+Moobile.Component.defineStyle('light', Moobile.Bar, {
+	attach: function(element) { element.addClass('style-light'); },
+	detach: function(element) { element.removeClass('style-light'); }
 });
 
 
@@ -4074,7 +4341,7 @@ Moobile.BarItem = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('bar-item');
+		this.addClass('bar-item');
 	}
 
 });
@@ -4125,7 +4392,7 @@ Moobile.NavigationBar = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('navigation-bar');
+		this.addClass('navigation-bar');
 	}
 
 });
@@ -4137,7 +4404,6 @@ Moobile.NavigationBar = new Class({
 Moobile.Component.defineRole('navigation-bar', null, null, function(element) {
 	this.addChildComponent(Moobile.Component.create(Moobile.NavigationBar, element, 'data-navigation-bar'));
 });
-
 
 
 /*
@@ -4188,7 +4454,7 @@ Moobile.NavigationBarItem = new Class({
 
 		this.parent();
 
-		this.element.addClass('navigation-bar-item');
+		this.addClass('navigation-bar-item');
 
 		var title = this.getRoleElement('title');
 		if (title === null) {
@@ -4197,6 +4463,10 @@ Moobile.NavigationBarItem = new Class({
 			title.inject(this.element);
 			title.setRole('title');
 		}
+
+		var wrapper = document.createElement('div');
+		wrapper.addClass('bar-title-wrapper');
+		wrapper.wraps(title);
 	},
 
 	/**
@@ -4220,10 +4490,7 @@ Moobile.NavigationBarItem = new Class({
 		if (this._title === title)
 			return this;
 
-		title = title || '';
-		if (typeof title === 'string') {
-			title = new Moobile.Text().setText(title);
-		}
+		title = Moobile.Text.from(title);
 
 		if (this._title) {
 			this._title.replaceWithComponent(title, true);
@@ -4233,8 +4500,7 @@ Moobile.NavigationBarItem = new Class({
 
 		this._title = title;
 		this._title.addClass('bar-title');
-
-		this.element.toggleClass('no-bar-title', this._title.isEmpty());
+		this.toggleClass('bar-title-empty', this._title.isEmpty());
 
 		return this;
 	},
@@ -4412,13 +4678,6 @@ Moobile.Slider = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	_mode: 'horizontal',
-
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
 	_position: {x: -1, y: -1},
 
 	/**
@@ -4427,6 +4686,20 @@ Moobile.Slider = new Class({
 	 * @since  0.1.0
 	 */
 	_value: null,
+
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	_minimum: 0,
+
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	_maximum: 0,
 
 	/**
 	 * @hidden
@@ -4464,6 +4737,20 @@ Moobile.Slider = new Class({
 	thumbElement: null,
 
 	/**
+	 * @see    http://moobilejs.com/doc/latest/Control/Slider#rangeElement
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	rangeElement: null,
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Control/Slider#valueElement
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	valueElement: null,
+
+	/**
 	 * @see    http://moobilejs.com/doc/latest/Control/Slider#hitAreaElement
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
@@ -4477,11 +4764,11 @@ Moobile.Slider = new Class({
 	 * @since  0.1.0
 	 */
 	options: {
-		value: 0,
-		mode: null,
+		mode: 'horizontal',
 		snap: false,
-		min: 0,
-		max: 100
+		value: 0,
+		minimum: 0,
+		maximum: 100
 	},
 
 	/**
@@ -4494,7 +4781,7 @@ Moobile.Slider = new Class({
 
 		this.parent();
 
-		this.element.addClass('slider');
+		this.addClass('slider');
 
 		this.trackElement = document.createElement('div');
 		this.trackElement.addClass('slider-track');
@@ -4514,12 +4801,21 @@ Moobile.Slider = new Class({
 
 		this.hitAreaElement = new Element('div.hit-area').inject(this.thumbElement);
 
+		// <0.1 compat>
+		if ('min' in this.options || 'max' in this.options) {
+			console.log('[DEPRECATION NOTICE] The options "min" and "max" will be removed in 0.4, use the "minimum" and "maximum" options instead');
+			if ('min' in this.options) this.options.minimum = this.options.min;
+			if ('max' in this.options) this.options.maximum = this.options.max;
+		}
+		// </0.1 compat>
+
+		this.setMinimum(this.options.minimum);
+		this.setMaximum(this.options.maximum);
+
 		var mode = this.options.mode;
 		if (mode) {
-			this.element.addClass('slider-mode-' + mode);
+			this.addClass('slider-mode-' + mode);
 		}
-
-		this._mode = mode || 'horizontal';
 	},
 
 	/**
@@ -4600,6 +4896,48 @@ Moobile.Slider = new Class({
 	},
 
 	/**
+	 * @see    http://moobilejs.com/doc/latest/Control/Slider#setMinimum
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	setMinimum: function(minimum) {
+		if (this._value < minimum) this.setValue(minimum);
+		this._minimum = minimum;
+		this.refresh();
+		return this;
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Control/Slider#getMinimum
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getMinimum: function() {
+		return this._minimum;
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Control/Slider#setMaximum
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	setMaximum: function(maximum) {
+		if (this._value > maximum) this.setValue(maximum);
+		this._maximum = maximum;
+		this.refresh();
+		return this;
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Control/Slider#setMaximum
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getMaximum: function() {
+		return this._maximum;
+	},
+
+	/**
 	 * @see    http://moobilejs.com/doc/latest/Control/Slider#refresh
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
@@ -4611,7 +4949,7 @@ Moobile.Slider = new Class({
 
 		var range = 0;
 
-		switch (this._mode) {
+		switch (this.options.mode) {
 			case 'horizontal':
 				range = trackSize.x - thumbSize.x;
 				break;
@@ -4620,7 +4958,8 @@ Moobile.Slider = new Class({
 				break;
 		}
 
-		this._valueRange = this.options.max - this.options.min;
+
+		this._valueRange = this._maximum - this._minimum;
 		this._trackRange = range;
 		this._trackLimit = {
 			min: 0,
@@ -4637,7 +4976,7 @@ Moobile.Slider = new Class({
 	 */
 	_move: function(x, y) {
 
-		switch (this._mode) {
+		switch (this.options.mode) {
 			case 'horizontal':
 				y = 0;
 				if (x < this._trackLimit.min) x = this._trackLimit.min;
@@ -4668,8 +5007,8 @@ Moobile.Slider = new Class({
 
 		this._position.x = x;
 		this._position.y = y;
-		this.thumbElement.setStyle('transform', 'translateX(' + x + 'px) translateY(' + y + 'px)');
-		this.valueElement.setStyle('transform', 'translateX(' + x + 'px) translateY(' + y + 'px)');
+		this.thumbElement.setStyle('transform', 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+		this.valueElement.setStyle('transform', 'translate3d(' + x + 'px, ' + y + 'px, 0)');
 
 		this.fireEvent('change', value);
 
@@ -4682,7 +5021,7 @@ Moobile.Slider = new Class({
 	 * @since  0.2.0
 	 */
 	_valueFromPosition: function(x, y) {
-		return (this._mode === 'horizontal' ? x : y) * this._valueRange / this._trackRange + this.options.min;
+		return (this.options.mode === 'horizontal' ? x : y) * this._valueRange / this._trackRange + this._minimum;
 	},
 
 	/**
@@ -4695,9 +5034,9 @@ Moobile.Slider = new Class({
 		var x = 0;
 		var y = 0;
 
-		var pos = (value - this.options.min) * this._trackRange / this._valueRange;
+		var pos = (value - this._minimum) * this._trackRange / this._valueRange;
 
-		switch (this._mode) {
+		switch (this.options.mode) {
 			case 'horizontal': x = pos.round(2); break;
 			case 'vertical':   y = pos.round(2); break;
 		}
@@ -4875,7 +5214,7 @@ Moobile.List = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('list');
+		this.addClass('list');
 	},
 
 	/**
@@ -4979,7 +5318,7 @@ Moobile.List = new Class({
 	 * @since  0.1.0
 	 */
 	addItem: function(item, where) {
-		return this.addChildComponent(item, where);
+		return this.addChildComponent(Moobile.ListItem.from(item), where);
 	},
 
 	/**
@@ -4988,7 +5327,7 @@ Moobile.List = new Class({
 	 * @since  0.1.0
 	 */
 	addItemAfter: function(item, after) {
-		return this.addChildComponentAfter(item, after);
+		return this.addChildComponentAfter(Moobile.ListItem.from(item), after);
 	},
 
 	/**
@@ -4997,7 +5336,7 @@ Moobile.List = new Class({
 	 * @since  0.1.0
 	 */
 	addItemBefore: function(item, before) {
-		return this.addChildComponentBefore(item, before);
+		return this.addChildComponentBefore(Moobile.ListItem.from(item), before);
 	},
 
 	/**
@@ -5079,11 +5418,31 @@ Moobile.List = new Class({
 	 * @since  0.1.0
 	 */
 	didAddChildComponent: function(component) {
+
 		this.parent(component);
+
 		if (component instanceof Moobile.ListItem) {
 			component.addEvent('tapstart', this.bound('_onItemTapStart'));
 			component.addEvent('tapend', this.bound('_onItemTapEnd'));
 			component.addEvent('tap', this.bound('_onItemTap'));
+		}
+
+		var components = this.getChildComponents();
+		for (var i = 0; i < components.length; i++) {
+			var prev = components[i - 1];
+			var next = components[i + 1];
+			var curr = components[i];
+			if (curr.hasStyle('header')) {
+				if (next) next.addClass('list-section-header');
+				if (prev) prev.addClass('list-section-footer');
+			} else {
+				if (next && next.hasStyle('header') ||
+					prev && prev.hasStyle('header')) {
+					continue;
+				}
+				curr.removeClass('list-section-header');
+				curr.removeClass('list-section-footer');
+			}
 		}
 	},
 
@@ -5242,7 +5601,7 @@ Moobile.ListItem = new Class({
 
 		this.parent();
 
-		this.element.addClass('list-item');
+		this.addClass('list-item');
 
 		var image  = this.getRoleElement('image');
 		var label  = this.getRoleElement('label');
@@ -5291,10 +5650,7 @@ Moobile.ListItem = new Class({
 		if (this._label === label)
 			return this;
 
-		label = label || '';
-		if (typeof label === 'string') {
-			label = new Moobile.Text().setText(label);
-		}
+		label = Moobile.Text.from(label);
 
 		if (this._label) {
 			this._label.replaceWithComponent(label, true);
@@ -5304,8 +5660,7 @@ Moobile.ListItem = new Class({
 
 		this._label = label;
 		this._label.addClass('list-item-label');
-
-		this.element.toggleClass('no-list-item-label', this._label.isEmpty());
+		this.toggleClass('list-item-label-empty', this._label.isEmpty());
 
 		return this;
 	},
@@ -5330,10 +5685,7 @@ Moobile.ListItem = new Class({
 		if (this._image === image)
 			return this;
 
-		image = image || '';
-		if (typeof image === 'string') {
-			image = new Moobile.Image().setSource(image);
-		}
+		image = Moobile.Image.from(image);
 
 		if (this._image) {
 			this._image.replaceWithComponent(image, true);
@@ -5343,8 +5695,7 @@ Moobile.ListItem = new Class({
 
 		this._image = image;
 		this._image.addClass('list-item-image');
-
-		this.element.toggleClass('no-list-item-image', this._image.isEmpty());
+		this.toggleClass('list-item-image-empty', this._image.isEmpty());
 
 		return this;
 	},
@@ -5369,10 +5720,7 @@ Moobile.ListItem = new Class({
 		if (this._detail === detail)
 			return this;
 
-		detail = detail || '';
-		if (typeof detail === 'string') {
-			detail = new Moobile.Text().setText(detail);
-		}
+		detail = Moobile.Text.from(detail);
 
 		if (this._detail) {
 			this._detail.replaceWithComponent(detail, true);
@@ -5382,8 +5730,7 @@ Moobile.ListItem = new Class({
 
 		this._detail = detail;
 		this._detail.addClass('list-item-detail');
-
-		this.element.toggleClass('no-list-item-detail', this._detail.isEmpty());
+		this.toggleClass('list-item-detail-empty', this._detail.isEmpty());
 
 		return this;
 	},
@@ -5395,16 +5742,46 @@ Moobile.ListItem = new Class({
 	 */
 	getDetail: function() {
 		return this._detail;
+	},
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	shouldAllowState: function(state) {
+
+		if (this.hasStyle('header') && (state === 'highlighted' || state === 'selected' || state === 'disabled')) {
+			return false;
+		}
+
+		return this.parent(state);
 	}
 
 });
+
+/**
+ * @see    http://moobilejs.com/doc/latest/Control/ListItem#from
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.2.0
+ */
+Moobile.ListItem.from = function(source) {
+	if (source instanceof Moobile.ListItem) return source;
+	var item = new Moobile.ListItem();
+	item.setLabel(source);
+	return item;
+};
 
 //------------------------------------------------------------------------------
 // Roles
 //------------------------------------------------------------------------------
 
-Moobile.Component.defineRole('list-item', Moobile.List, null, function(element) {
-	this.addItem(Moobile.Component.create(Moobile.ListItem, element, 'data-list-item'));
+Moobile.Component.defineRole('item', Moobile.List, null, function(element) {
+	this.addItem(Moobile.Component.create(Moobile.ListItem, element, 'data-item'));
+});
+
+Moobile.Component.defineRole('header', Moobile.List, null, function(element) {
+	this.addItem(Moobile.Component.create(Moobile.ListItem, element, 'data-item').setStyle('header'));
 });
 
 Moobile.Component.defineRole('image', Moobile.ListItem, null, function(element) {
@@ -5419,77 +5796,44 @@ Moobile.Component.defineRole('detail', Moobile.ListItem, null, function(element)
 	this.setDetail(Moobile.Component.create(Moobile.Text, element, 'data-detail'));
 });
 
+// <0.1-compat>
+/**
+ * @deprecated
+ */
+Moobile.Component.defineRole('list-item', Moobile.List, null, function(element) {
+	console.log('[DEPRECATION NOTICE] The role "list-item" will be removed in 0.4, use the role "item" instead');
+	this.addItem(Moobile.Component.create(Moobile.ListItem, element, 'data-list-item'));
+});
+// </0.1-compat>
+
 //------------------------------------------------------------------------------
 // Styles
 //------------------------------------------------------------------------------
 
-/* iOS  */
+/* Header Style - iOS Android */
+Moobile.Component.defineStyle('header', Moobile.ListItem, {
+	attach: function(element) { element.addClass('style-header'); },
+	detach: function(element) { element.removeClass('style-header'); }
+});
 
+/* Checked Style - iOS */
 Moobile.Component.defineStyle('checked', Moobile.ListItem, {
 	attach: function(element) { element.addClass('style-checked'); },
 	detach: function(element) { element.removeClass('style-checked'); }
 });
 
+/* Disclosed Style - iOS */
 Moobile.Component.defineStyle('disclosed', Moobile.ListItem, {
 	attach: function(element) { element.addClass('style-disclosed'); },
 	detach: function(element) { element.removeClass('style-disclosed'); }
 });
 
+/* Detailed Style - iOS */
 Moobile.Component.defineStyle('detailed', Moobile.ListItem, {
 	attach: function(element) { element.addClass('style-detailed'); },
 	detach: function(element) { element.removeClass('style-detailed'); }
 });
 
-
-/*
----
-
-name: ListItemHeader
-
-description: Provides a list item header control.
-
-license: MIT-style license.
-
-authors:
-	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-
-requires:
-	- ListItem
-
-provides:
-	- ListItemHeader
-
-...
-*/
-
-/**
- * @see    http://moobilejs.com/doc/latest/Control/ListItemHEader
- * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
- * @since  0.2.0
- */
-Moobile.ListItemHeader = new Class({
-
-	Extends: Moobile.ListItem,
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	willBuild: function() {
-		this.parent();
-		this.element.addClass('list-item-header');
-	}
-
-});
-
-//------------------------------------------------------------------------------
-// Roles
-//------------------------------------------------------------------------------
-
-Moobile.Component.defineRole('list-item-header', Moobile.List, null, function(element) {
-	this.addItem(Moobile.Component.create(Moobile.ListItemHeader, element, 'data-list-item-header'));
-});
 
 /*
 ---
@@ -5528,7 +5872,7 @@ Moobile.ActivityIndicator = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('activity-indicator');
+		this.addClass('activity-indicator');
 	},
 
 	/**
@@ -5642,9 +5986,8 @@ Moobile.Image = new Class({
 
 		this.parent();
 
-		this.element.addClass('image');
-
 		this.hide();
+		this.addClass('image');
 
 		var source = this.element.get('src');
 		if (source) {
@@ -5658,9 +6001,18 @@ Moobile.Image = new Class({
 	 * @since  0.1.0
 	 */
 	destroy: function() {
-		this._image = null;
+
+		if (this._image) {
+			this._image.removeEvent('load', this.bound('_onLoad'));
+			this._image.src = 'data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+			this._image = null;
+		}
+
+		this.element.set('src', 'data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+
 		this.parent();
 	},
+
 
 	/**
 	 * @see    http://moobilejs.com/doc/latest/Control/Image#setSource
@@ -5669,7 +6021,7 @@ Moobile.Image = new Class({
 	 */
 	setSource: function(source) {
 
-		this._source = source;
+		this._source = source || '';
 
 		if (this._image) {
 			this._image.removeEvent('load', this.bound('_onLoad'));
@@ -5734,7 +6086,16 @@ Moobile.Image = new Class({
 	 * @since  0.2.0
 	 */
 	isEmpty: function() {
-		return this.getSource() === '';
+		return !this.getSource();
+	},
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	show: function() {
+		return this.isEmpty() ? this : this.parent();
 	},
 
 	/**
@@ -5752,7 +6113,6 @@ Moobile.Image = new Class({
 		}
 
 		this.element.set('src', this._source);
-		this.fireEvent('load');
 		this.show();
 	},
 
@@ -5781,10 +6141,23 @@ Moobile.Image = new Class({
 	 * @since  0.1.0
 	 */
 	_onLoad: function() {
+		this.fireEvent('preload');
 		this._load();
 	}
 
 });
+
+/**
+ * @see    http://moobilejs.com/doc/latest/Control/Image#from
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.2.0
+ */
+Moobile.Image.from = function(source) {
+	if (source instanceof Moobile.Image) return source;
+	var image = new Moobile.Image();
+	image.setSource(source);
+	return image;
+};
 
 //------------------------------------------------------------------------------
 // Roles
@@ -5841,7 +6214,7 @@ Moobile.Text = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('text');
+		this.addClass('text');
 	},
 
 	/**
@@ -5851,13 +6224,7 @@ Moobile.Text = new Class({
 	 * @since  0.1.0
 	 */
 	setText: function(text) {
-
-		if (text instanceof Moobile.Text) {
-			text = text.getText();
-		}
-
-		this.element.set('html', text);
-
+		this.element.set('html',  text instanceof Moobile.Text ? text.getText() : (text || typeof text === 'number' ? text + '' : ''));
 		return this;
 	},
 
@@ -5876,10 +6243,22 @@ Moobile.Text = new Class({
 	 * @since  0.2.0
 	 */
 	isEmpty: function() {
-		return this.getText() === '';
+		return !this.getText();
 	}
 
 });
+
+/**
+ * @see    http://moobilejs.com/doc/latest/Control/Text#from
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.2.0
+ */
+Moobile.Text.from = function(source) {
+	if (source instanceof Moobile.Text) return source;
+	var text = new Moobile.Text();
+	text.setText(source);
+	return text;
+};
 
 //------------------------------------------------------------------------------
 // Roles
@@ -5910,6 +6289,8 @@ provides:
 
 ...
 */
+
+// TODO: Unit tests for buttons methods
 
 /**
  * @see    http://moobilejs.com/doc/latest/Dialog/Alert
@@ -5983,7 +6364,7 @@ Moobile.Alert = new Class({
 	 * @since  0.1.0
 	 */
 	options: {
-		layout: null
+		layout: 'horizontal'
 	},
 
 	/**
@@ -5996,8 +6377,8 @@ Moobile.Alert = new Class({
 
 		this.parent();
 
-		this.element.addClass('alert');
-		this.element.addEvent('animationend', this.bound('_onAnimationEnd'));
+		this.addClass('alert');
+		this.addEvent('animationend', this.bound('_onAnimationEnd'));
 
 		this.overlay = new Moobile.Overlay();
 		this.overlay.setStyle('radial');
@@ -6022,8 +6403,19 @@ Moobile.Alert = new Class({
 
 		var layout = this.options.layout;
 		if (layout) {
-			this.element.addClass('alert-layout-' + layout);
+			this.addClass('alert-layout-' + layout);
 		}
+	},
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	didBuild: function() {
+		this.parent();
+		this.setTitle('');
+		this.setMessage('');
 	},
 
 	/**
@@ -6033,7 +6425,7 @@ Moobile.Alert = new Class({
 	 */
 	destroy: function() {
 
-		this.element.addEvent('animationend', this.bound('_onAnimationEnd'));
+		this.removeEvent('animationend', this.bound('_onAnimationEnd'));
 
 		this._title = null;
 		this._message = null;
@@ -6059,10 +6451,7 @@ Moobile.Alert = new Class({
 		if (this._title === title)
 			return this;
 
-		title = title || '';
-		if (typeof title === 'string') {
-			title = new Moobile.Text().setText(title);
-		}
+		title = Moobile.Text.from(title);
 
 		if (this._title) {
 			this._title.replaceWithComponent(title, true);
@@ -6072,8 +6461,7 @@ Moobile.Alert = new Class({
 
 		this._title = title;
 		this._title.addClass('alert-title');
-
-		this.element.toggleClass('no-alert-title', this._title.isEmpty());
+		this.toggleClass('alert-title-empty', this._title.isEmpty());
 
 		return this;
 	},
@@ -6097,10 +6485,7 @@ Moobile.Alert = new Class({
 		if (this._message === message)
 			return this;
 
-		message = message || '';
-		if (typeof message === 'string') {
-			message = new Moobile.Text().setText(message);
-		}
+		message = Moobile.Text.from(message);
 
 		if (this._message) {
 			this._message.replaceWithComponent(message, true);
@@ -6110,8 +6495,7 @@ Moobile.Alert = new Class({
 
 		this._message = message;
 		this._message.addClass('alert-message');
-
-		this.element.toggleClass('no-alert-message', this._message.isEmpty());
+		this.toggleClass('alert-message-empty', this._message.isEmpty());
 
 		return this;
 	},
@@ -6130,13 +6514,71 @@ Moobile.Alert = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1.0
 	 */
-	addButton: function(button) {
+	addButton: function(button, where) {
+		return this.addChildComponentInside(Moobile.Button.from(button), this.footerElement, where);
+	},
 
-		if (typeof button === 'string') {
-			button = new Moobile.Button().setLabel(button);
-		}
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#addButtonAfter
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	addButtonAfter: function(button, after) {
+		return this.addChildComponentAfter(Moobile.Button.from(button), after);
+	},
 
-		return this.addChildComponentInside(button, this.footerElement);
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#addButtonBefore
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	addButtonBefore: function(button, before) {
+		return this.addChildComponentBefore(Moobile.Button.from(button), before);
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#getButtons
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getButtons: function() {
+		return this.getChildComponentsOfType(Moobile.Button);
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#getButton
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getButton: function(name) {
+		return this.getChildComponentOfType(Moobile.Button, name);
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#getButtonAt
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getButtonAt: function(index) {
+		return this.getChildComponentOfTypeAt(Moobile.Button, index);
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#removeButton
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	removeButton: function(button, destroy) {
+		return this.removeChildComponent(button, destroy);
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/Dialog/Alert#removeAllButtons
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	removeAllButtons: function(destroy) {
+		return this.removeAllChildComponentsOfType(Moobile.Button, destroy);
 	},
 
 	/**
@@ -6188,11 +6630,11 @@ Moobile.Alert = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1.0
 	 */
-	didAddChildComponent: function(child) {
-		this.parent(child);
-		if (child instanceof Moobile.Button) {
-			child.addEvent('tap', this.bound('_onButtonTap'));
-			this._buttons.include(child);
+	didAddChildComponent: function(component) {
+		this.parent(component);
+		if (component instanceof Moobile.Button) {
+			component.addEvent('tap', this.bound('_onButtonTap'));
+			this._buttons.include(component);
 		}
 	},
 
@@ -6201,26 +6643,32 @@ Moobile.Alert = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1.0
 	 */
-	didRemoveChildComponent: function(child) {
-		this.parent(child);
-		if (child instanceof Moobile.Button) {
-			child.removeEvent('tap', this.bound('_onButtonTap'));
-			this._buttons.erase(child);
+	didRemoveChildComponent: function(component) {
+		this.parent(component);
+		if (component instanceof Moobile.Button) {
+			component.removeEvent('tap', this.bound('_onButtonTap'));
+			this._buttons.erase(component);
 		}
 	},
 
 	/**
 	 * @overridden
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @edited 0.2.0
 	 * @since  0.1.0
 	 */
 	willShow: function() {
+
 		this.parent();
-		if (this._buttons.length === 0) {
-			var button = new Moobile.Button();
-			button.setLabel('OK');
-			this.addButton(button);
+
+		if (this.getParentView() === null) {
+			var instance = Moobile.Window.getCurrentInstance();
+			if (instance) {
+				instance.addChildComponent(this);
+			}
 		}
+
+		if (this._buttons.length === 0) this.addButton('OK');
 	},
 
 	/**
@@ -6230,7 +6678,7 @@ Moobile.Alert = new Class({
 	 */
 	didHide: function() {
 		this.parent();
-		this.destroy();
+		this.removeFromParentComponent();
 	},
 
 	/**
@@ -6257,13 +6705,13 @@ Moobile.Alert = new Class({
 
 		e.stop();
 
-		if (this.element.hasClass('show-animated')) {
-			this.element.removeClass('show-animated');
+		if (this.hasClass('show-animated')) {
+			this.removeClass('show-animated');
 			this.didShow();
 		}
 
-		if (this.element.hasClass('hide-animated')) {
-			this.element.removeClass('hide-animated');
+		if (this.hasClass('hide-animated')) {
+			this.removeClass('hide-animated');
 			this.element.hide();
 			this.didHide();
 		}
@@ -6567,53 +7015,6 @@ Element.defineCustomEvent('ownanimationend', {
 /*
 ---
 
-name: Event.Rotate
-
-description: Provides an event that indicates the window rotated.
-
-license: MIT-style license.
-
-author:
-	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-
-requires:
-	- Core/Event
-	- Core/Element.Event
-	- Custom-Event/Element.defineCustomEvent
-
-provides:
-	- Event.Rotate
-
-...
-*/
-
-(function() {
-
-if (!window.orientation) window.orientation = 0;
-if (!window.orientationName) window.orientationName = 'portrait';
-
-var orientation = function() {
-	window.orientationName = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
-};
-
-Element.defineCustomEvent('rotate', {
-
-	base: 'orientationchange',
-
-	condition: function(e) {
-		orientation();
-		return true;
-	}
-
-});
-
-orientation();
-
-})();
-
-/*
----
-
 name: Event.Mouse
 
 description: Correctly translate mouse events to touch events.
@@ -6882,54 +7283,6 @@ Element.defineCustomEvent('mousedown', {
 /*
 ---
 
-name: Event.HashChange
-
-description: Provides history based events
-
-license: MIT-style license.
-
-author:
-	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-
-requires:
-	- Custom-Event/Element.defineCustomEvent
-
-provides:
-	- Event.HashChange
-
-...
-*/
-
-(function() {
-/*
-var count = 0;
-var timer = null;
-var value = null;
-
-var check = function() {
-	var hash = location.hash;
-	if (hash !== value) {
-		value = location.hash;
-		window.fireEvent('hashchange', value.indexOf('#') == 0 ? value.substr(1) : value);
-	}
-};
-
-Element.defineCustomEvent('hashchange', {
-
-	onSetup: function() {
-		if (++count === 1) timer = check.periodical(200);
-	},
-
-	onTeardown: function() {
-		if (--count === 0) clearTimeout(timer);
-	}
-});
-*/
-})();
-
-/*
----
-
 name: Request
 
 description: Provides a request that allow loading files locally.
@@ -7027,9 +7380,10 @@ Moobile.Scroller = new Class({
 	 * @since  0.2.0
 	 */
 	options: {
+		scroll: 'vertial',
+		scrollbar: 'vertical',
 		momentum: true,
-		scrollX: true,
-		scrollY: true,
+		bounce: true
 	},
 
 	/**
@@ -7040,7 +7394,6 @@ Moobile.Scroller = new Class({
 	initialize: function(contentElement, contentWrapperElement, options) {
 		this.contentElement = document.id(contentElement);
 		this.contentWrapperElement = document.id(contentWrapperElement);
-		this.contentElement.addClass('scrollable-content');
 		this.contentWrapperElement.addClass('scrollable');
 		this.setOptions(options);
 		return this;
@@ -7100,29 +7453,13 @@ Moobile.Scroller = new Class({
 	 */
 	getScroll: function() {
 		throw new Error('You must override this method');
-	},
-
-	/**
-	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller#getSize
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	getSize: function() {
-		throw new Error('You must override this method');
-	},
-
-	/**
-	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller#getScrollSize
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	getScrollSize: function() {
-		throw new Error('You must override this method');
 	}
 
 });
 
 Moobile.Scroller.create = function(contentElement, contentWrapperElement, scrollers, options) {
+
+	var scroller = null;
 
 	scrollers = scrollers ? Array.from(scrollers) : ['IScroll.Android', 'Native', 'IScroll'];
 
@@ -7149,12 +7486,48 @@ Moobile.Scroller.create = function(contentElement, contentWrapperElement, scroll
 };
 
 window.addEvent('domready', function(e) {
+
+	var scrolls = {};
+
 	document.addEvent('touchstart', function(e) {
-		if (!e.target.hasClass('scrollable') &&
-			!e.target.getParent('.scrollable')) {
-			e.preventDefault();
+
+		var touches = e.changedTouches;
+
+		for (var i = 0, l = touches.length; i < l; i++) {
+
+			var touch = touches[i];
+			var target = touch.target;
+			var identifier = touch.identifier;
+
+			if (target.tagName.match(/input|textarea|select/i)) {
+				scrolls[identifier] = false;
+				return;
+			}
+
+			if (target.hasClass('scrollable') ||
+				target.getParent('.scrollable')) {
+				scrolls[identifier] = true;
+			} else {
+				scroll[identifier] = false;
+				e.preventDefault();
+			}
 		}
 	});
+
+	document.addEvent('touchmove', function(e) {
+		var touches = e.changedTouches;
+		for (var i = 0, l = touches.length; i < l; i++) {
+			if (scrolls[touches[i].identifier] === false) e.preventDefault();
+		}
+	});
+
+	document.addEvent('touchend', function(e) {
+		var touches = e.changedTouches;
+		for (var i = 0, l = touches.length; i < l; i++) {
+			delete scrolls[touches[i].identifier];
+		}
+	});
+
 });
 
 
@@ -7200,6 +7573,22 @@ iScroll.prototype._checkDOMChanges = function() {
 
 })();
 
+var touchid = null;
+
+var fixtouch = function(e) {
+
+	var touch = {
+		identifier: touchid,
+		target: e.target,
+		pageX: e.pageX,
+		pageY: e.pageY,
+		clientX: e.clientX,
+		clientY: e.clientY
+	};
+
+	e.touches = e.targetTouches = e.changedTouches = [touch];
+};
+
 /**
  * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.IScroll
  * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
@@ -7210,25 +7599,11 @@ Moobile.Scroller.IScroll = new Class({
 	Extends: Moobile.Scroller,
 
 	/**
-	 * @hidden
+	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.IScroll#scroller
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	_activeTouch: null,
-
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	_moving: false,
-
-	/**
-	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.IScroll#iscroll
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	iscroll: null,
+	scroller: null,
 
 	/**
 	 * @overridden
@@ -7237,42 +7612,27 @@ Moobile.Scroller.IScroll = new Class({
 	 */
 	initialize: function(contentElement, contentWrapperElement, options) {
 
-		this.parent(contentElement, contentWrapperElement, options);
+		this.parent(contentElement, contentWrapperElement, options)
 
-		this.loadEngine();
-		this.contentWrapperElement.addEvent('touchstart', this.bound('_onTouchStart'));
-		this.contentWrapperElement.addEvent('touchend', this.bound('_onTouchEnd'));
-
-		window.addEvent('orientationchange', this.bound('_onOrientationChange'));
-
-		return this;
-	},
-
-	/**
-	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.IScroll#loadEngine
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	loadEngine: function() {
-
-		this.iscroll = new iScroll(this.contentWrapperElement, {
-			hScroll: this.options.scrollX,
-			vScroll: this.options.scrollY,
+		this.scroller = new iScroll(contentWrapperElement, {
+			scrollbarClass: 'scrollbar-',
+			hScroll: this.options.scroll === 'both' || this.options.scroll === 'horizontal',
+			vScroll: this.options.scroll === 'both' || this.options.scroll === 'vertical',
+			hScrollbar: this.options.scrollbar === 'both' || this.options.scrollbar === 'horizontal',
+			vScrollbar: this.options.scrollbar === 'both' || this.options.scrollbar === 'vertical',
 			momentum: this.options.momentum,
-			bounce: this.options.momentum,
-			hScrollbar: this.options.momentum,
-			vScrollbar: this.options.momentum,
-			useTransform: true,
-			useTransition: true,
+			bounce: this.options.bounce,
 			hideScrollbar: true,
 			fadeScrollbar: true,
 			checkDOMChanges: true,
-			snap: false,
 			onBeforeScrollStart: this.bound('_onBeforeScrollStart'),
-			onAnimationEnd: this.bound('_onAnimationEnd'),
+			onScrollStart: this.bound('_onScrollStart'),
 			onScrollMove: this.bound('_onScrollMove'),
-			onScrollEnd: this.bound('_onScrollEnd')
+			onScrollEnd: this.bound('_onScrollEnd'),
+			onTouchEnd: this.bound('_onTouchEnd')
 		});
+
+		window.addEvent('resize', this.bound('refresh'));
 
 		return this;
 	},
@@ -7283,11 +7643,9 @@ Moobile.Scroller.IScroll = new Class({
 	 * @since  0.2.0
 	 */
 	destroy: function() {
-		window.removeEvent('orientationchange', this.bound('_onOrientationChange'));
-		this.contentWrapperElement.removeEvent('touchstart', this.bound('_onTouchStart'));
-		this.contentWrapperElement.removeEvent('touchend', this.bound('_onTouchEnd'));
-		this.iscroll.destroy();
-		this.iscroll = null;
+		window.removeEvent('resize', this.bound('refresh'));
+		this.scroller.destroy();
+		this.scroller = null;
 		return this.parent();
 	},
 
@@ -7306,8 +7664,7 @@ Moobile.Scroller.IScroll = new Class({
 	 * @since  0.2.0
 	 */
 	scrollTo: function(x, y, time) {
-		this._moving = true;
-		this.iscroll.scrollTo(-x, -y, time || 0);
+		this.scroller.scrollTo(-x, -y, time || 0);
 		return this;
 	},
 
@@ -7317,8 +7674,7 @@ Moobile.Scroller.IScroll = new Class({
 	 * @since  0.2.0
 	 */
 	scrollToElement: function(element, time) {
-		this._moving = true;
-		this.iscroll.scrollToElement(document.id(element), time || 0);
+		this.scroller.scrollToElement(document.id(element), time || 0);
 		return this;
 	},
 
@@ -7328,7 +7684,7 @@ Moobile.Scroller.IScroll = new Class({
 	 * @since  0.2.0
 	 */
 	refresh: function() {
-		this.iscroll.refresh();
+		this.scroller.refresh();
 		return this;
 	},
 
@@ -7338,25 +7694,10 @@ Moobile.Scroller.IScroll = new Class({
 	 * @since  0.2.0
 	 */
 	getScroll: function() {
-		return {x: -this.iscroll.x, y: -this.iscroll.y};
-	},
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	getSize: function() {
-		return this.contentWrapperElement.getSize();
-	},
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	getScrollSize: function() {
-		return this.contentWrapperElement.getScrollSize();
+		return {
+			x: -this.scroller.x,
+			y: -this.scroller.y
+		};
 	},
 
 	/**
@@ -7367,8 +7708,8 @@ Moobile.Scroller.IScroll = new Class({
 	_onBeforeScrollStart: function(e) {
 		var target = e.target.get('tag');
 		if (target !== 'input' &&
-			target !== 'select') {
-			// fixes android issue
+			target !== 'select' &&
+			target !== 'textarea') {
 			e.preventDefault();
 		}
 	},
@@ -7378,9 +7719,22 @@ Moobile.Scroller.IScroll = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	_onAnimationEnd: function() {
-		this._moving = false;
-		this.fireEvent('scroll');
+	_onScrollStart: function(e) {
+
+		if (!('touches' in e)) {
+
+			if (touchid)
+				return this;
+
+			if (touchid === null) {
+				touchid = String.uniqueID();
+				fixtouch(e);
+			}
+		}
+
+
+		this.fireEvent('touchstart', e);
+		this.fireEvent('scrollstart');
 	},
 
 	/**
@@ -7388,7 +7742,13 @@ Moobile.Scroller.IScroll = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	_onScrollMove: function() {
+	_onScrollMove: function(e) {
+
+		if (touchid) {
+			fixtouch(e);
+		}
+
+		this.fireEvent('touchmove', e);
 		this.fireEvent('scroll');
 	},
 
@@ -7398,7 +7758,8 @@ Moobile.Scroller.IScroll = new Class({
 	 * @since  0.2.0
 	 */
 	_onScrollEnd: function() {
-		// this event is not reliable
+		this.fireEvent('scroll');
+		this.fireEvent('scrollend');
 	},
 
 	/**
@@ -7406,114 +7767,20 @@ Moobile.Scroller.IScroll = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	_onTouchStart: function(e) {
-		if (this._activeTouch === null) {
-			this._activeTouch = e.changedTouches[0];
-			if (this._moving) {
-				this._moving = false;
-				this.fireEvent('scroll');
-			}
+	_onTouchEnd:  function(e) {
+
+		if (touchid) {
+			fixtouch(e);
+			touchid = null;
 		}
-	},
 
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	_onTouchEnd: function(e) {
-		if (this._activeTouch.identifier === e.changedTouches[0].identifier) {
-			this._activeTouch = null;
-		}
-	},
-
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	_onOrientationChange: function() {
-		this.refresh();
+		this.fireEvent('touchend', e);
 	}
 
 });
 
 Moobile.Scroller.IScroll.supportsCurrentPlatform = function() {
 	return true;
-};
-
-
-/*
----
-
-name: Scroller.IScroll.Android
-
-description: Provides a scroller that uses the iScroll scroller.
-
-license: MIT-style license.
-
-authors:
-	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-
-requires:
-	- Scroller.IScroll
-
-provides:
-	- Scroller.IScroll.Android
-
-...
-*/
-
-
-/**
- * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.IScroll.Android
- * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
- * @since  0.2.0
- */
-Moobile.Scroller.IScroll.Android = new Class({
-
-	Extends: Moobile.Scroller.IScroll,
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	loadEngine: function() {
-
-		this.iscroll = new iScroll(this.contentWrapperElement, {
-			hScroll: this.options.scrollX,
-			vScroll: this.options.scrollY,
-			momentum: this.options.momentum,
-			bounce: false,
-			hScrollbar: true,
-			vScrollbar: true,
-			hideScrollbar: true,
-			fadeScrollbar: true,
-			checkDOMChanges: true,
-			scrollbarClass: 'scroll-bar-',
-			onBeforeScrollStart: this.bound('_onBeforeScrollStart'),
-			onAnimationEnd: this.bound('_onAnimationEnd'),
-			onScrollMove: this.bound('_onScrollMove'),
-			onScrollEnd: this.bound('_onScrollEnd')
-		});
-
-		return this;
-	},
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	getName: function() {
-		return 'iscroll-android';
-	},
-
-});
-
-Moobile.Scroller.IScroll.Android.supportsCurrentPlatform = function() {
-	return Browser.Platform.android;
 };
 
 
@@ -7538,6 +7805,41 @@ provides:
 ...
 */
 
+(function() {
+
+//
+// Note:
+// requestAnimationFrame polyfill by Erik Möller
+//
+
+var requestAnimationFrame;
+var cancelAnimationFrame;
+
+var lastTime = 0;
+
+var vendors = ['ms', 'moz', 'webkit', 'o'];
+
+for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+}
+
+if (requestAnimationFrame == undefined) {
+    requestAnimationFrame = function(callback, element) {
+        var currTime = new Date().getTime();
+        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+        var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
+        lastTime = currTime + timeToCall;
+        return id;
+    };
+}
+
+if (cancelAnimationFrame === undefined) {
+    cancelAnimationFrame = function(id) {
+        clearTimeout(id);
+    };
+}
+
 /**
  * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.Native
  * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
@@ -7552,14 +7854,14 @@ Moobile.Scroller.Native = new Class({
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	_activeTouch: null,
+	_animating: false,
 
 	/**
-	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.Native#contentScroller
+	 * @hidden
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
 	 */
-	contentScroller: null,
+	_animation: null,
 
 	/**
 	 * @see    http://moobilejs.com/doc/latest/Scroller/Scroller.Native#contentScrollerElement
@@ -7577,6 +7879,11 @@ Moobile.Scroller.Native = new Class({
 
 		this.parent(contentElement, contentWrapperElement, options);
 
+		if (this.options.snapToPage) {
+			this.options.momentum = false;
+			this.options.bounce = false;
+		}
+
 		var styles = {
 			'top': 0, 'left': 0, 'bottom': 0, 'right': 0,
 			'position': 'absolute',
@@ -7593,10 +7900,8 @@ Moobile.Scroller.Native = new Class({
 
 		this.contentScrollerElement = scrollFixInnerDiv;
 		this.contentScrollerElement.addEvent('touchstart', this.bound('_onTouchStart'));
+		this.contentScrollerElement.addEvent('touchmove', this.bound('_onTouchMove'));
 		this.contentScrollerElement.addEvent('touchend', this.bound('_onTouchEnd'));
-		this.contentScrollerElement.addEvent('scroll', this.bound('_onScroll'));
-
-		this.contentScroller = new Fx.Scroll(this.contentScrollerElement);
 
 		window.addEvent('orientationchange', this.bound('_onOrientationChange'));
 
@@ -7611,6 +7916,7 @@ Moobile.Scroller.Native = new Class({
 	destroy: function() {
 
 		this.contentScrollerElement.removeEvent('touchstart', this.bound('_onTouchStart'));
+		this.contentScrollerElement.removeEvent('touchend', this.bound('_onTouchMove'));
 		this.contentScrollerElement.removeEvent('touchend', this.bound('_onTouchEnd'));
 		this.contentScrollerElement.removeEvent('scroll', this.bound('_onScroll'));
 		this.contentScrollerElement = null;
@@ -7641,24 +7947,51 @@ Moobile.Scroller.Native = new Class({
 		x = x || 0;
 		y = y || 0;
 
-		var onStart = function() {
-			this._detachEvents();
-		}.bind(this);
+		if (this._animating) {
+			this._animating = false;
+			cancelAnimationFrame(this._animation);
+		}
 
-		var onComplete = function() {
-			this._attachEvents();
-			this.contentScroller.removeEvents('cancel');
-			this.contentScroller.removeEvents('complete');
-			this.fireEvent('scroll');
-		}.bind(this);
+		var now = Date.now();
 
-		this.contentScroller.cancel();
+		var self = this;
+		var elem = this.contentScrollerElement;
 
-		this.contentScroller.setOptions({duration: time || 0});
-		this.contentScroller.addEvent('start:once', onStart)
-		this.contentScroller.addEvent('cancel:once', onComplete);
-		this.contentScroller.addEvent('complete:once', onComplete);
-		this.contentScroller.start(x, y);
+		var absX = Math.abs(x);
+		var absY = Math.abs(y);
+
+		var currX = elem.scrollLeft;
+		var currY = elem.scrollTop;
+
+		var dirX = x - currX;
+		var dirY = y - currY;
+
+		var update = function() {
+
+			if (elem.scrollLeft === x &&
+				elem.scrollTop === y) {
+				self.fireEvent('scroll');
+				self._animating = false;
+				self._animation = null;
+				return;
+			}
+
+			var valueX = ((Date.now() - now) * (x - currX) / time);
+			var valueY = ((Date.now() - now) * (y - currY) / time);
+			var scrollX = valueX + currX;
+			var scrollY = valueY + currY;
+
+			if ((scrollX >= x && dirX >= 0) || (scrollX < x && dirX < 0)) scrollX = x;
+			if ((scrollY >= y && dirY >= 0) || (scrollY < y && dirY < 0)) scrollY = y;
+
+			elem.scrollLeft = scrollX;
+			elem.scrollTop  = scrollY;
+
+			self._animating = true;
+			self._animation = requestAnimationFrame(update);
+		};
+
+		this._animation = requestAnimationFrame(update);
 
 		return this;
 	},
@@ -7670,24 +8003,11 @@ Moobile.Scroller.Native = new Class({
 	 */
 	scrollToElement: function(element, time) {
 
-		var onStart = function() {
-			this._detachEvents();
-		}.bind(this);
-
-		var onComplete = function() {
-			this._attachEvents();
-			this.contentScroller.removeEvents('cancel');
-			this.contentScroller.removeEvents('complete');
-			this.fireEvent('scroll');
-		}.bind(this);
-
-		this.contentScroller.cancel();
-
-		this.contentScroller.setOptions({duration: time || 0});
-		this.contentScroller.addEvent('start:once', onStart)
-		this.contentScroller.addEvent('cancel:once', onComplete);
-		this.contentScroller.addEvent('complete:once', onComplete);
-		this.contentScroller.toElement(element);
+		var elem = document.id(element);
+		if (elem) {
+			var p = element.getPosition(this.contentElement);
+			this.scrollTo(p.x, p.y, time);
+		}
 
 		return this;
 	},
@@ -7699,12 +8019,14 @@ Moobile.Scroller.Native = new Class({
 	 */
 	refresh: function() {
 
-		var wrapperSize = this.getSize();
-		var contentSize = this.getScrollSize();
+		var wrapperSize = this.contentWrapperElement.getSize();
+		var contentSize = this.contentElement.getScrollSize();
 
 		if (this.options.momentum) {
-			if (this.options.scrollY && contentSize.y <= wrapperSize.y) this.contentElement.setStyle('min-height', wrapperSize.y + 1);
-			if (this.options.scrollX && contentSize.x <= wrapperSize.x) this.contentElement.setStyle('min-width',  wrapperSize.x + 1);
+			var scrollX = this.options.scroll === 'both' || this.options.scroll === 'horizontal';
+			var scrollY = this.options.scroll === 'both' || this.options.scroll === 'vertical';
+			if (scrollY && contentSize.y <= wrapperSize.y) this.contentElement.setStyle('min-height', wrapperSize.y + 1);
+			if (scrollX && contentSize.x <= wrapperSize.x) this.contentElement.setStyle('min-width',  wrapperSize.x + 1);
 		}
 
 		return this;
@@ -7749,15 +8071,6 @@ Moobile.Scroller.Native = new Class({
 	},
 
 	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	getScrollSize: function() {
-		return this.contentElement.getScrollSize();
-	},
-
-	/**
 	 * @hidden
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.2.0
@@ -7772,12 +8085,16 @@ Moobile.Scroller.Native = new Class({
 	 * @since  0.2.0
 	 */
 	_onTouchStart: function(e) {
-		if (this._activeTouch === null) {
-			this._activeTouch = e.changedTouches[0];
-			if (this.contentScroller.isRunning()) {
-				this.contentScroller.cancel();
-			}
-		}
+		this.fireEvent('touchstart', e);
+	},
+
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	_onTouchMove: function(e) {
+		this.fireEvent('touchmove', e);
 	},
 
 	/**
@@ -7786,9 +8103,7 @@ Moobile.Scroller.Native = new Class({
 	 * @since  0.2.0
 	 */
 	_onTouchEnd: function(e) {
-		if (this._activeTouch.identifier === e.changedTouches[0].identifier) {
-			this._activeTouch = null;
-		}
+		this.fireEvent('touchend', e);
 	},
 
 	/**
@@ -7806,6 +8121,7 @@ Moobile.Scroller.Native.supportsCurrentPlatform = function() {
 	return Browser.Platform.ios && 'WebkitOverflowScrolling' in document.createElement('div').style;
 };
 
+})();
 
 /*
 ---
@@ -7845,8 +8161,8 @@ Moobile.Overlay = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('overlay');
-		this.element.addEvent('animationend', this.bound('_onAnimationEnd'));
+		this.addClass('overlay');
+		this.addEvent('animationend', this.bound('_onAnimationEnd'));
 	},
 
 	/**
@@ -7855,7 +8171,7 @@ Moobile.Overlay = new Class({
 	 * @since  0.1.0
 	 */
 	destroy: function() {
-		this.element.removeEvent('animationend', this.bound('_onAnimationEnd'));
+		this.removeEvent('animationend', this.bound('_onAnimationEnd'));
 		this.parent();
 	},
 
@@ -7891,14 +8207,14 @@ Moobile.Overlay = new Class({
 
 		e.stop();
 
-		if (this.element.hasClass('show-animated')) {
-			this.element.removeClass('show-animated');
+		if (this.hasClass('show-animated')) {
+			this.removeClass('show-animated');
 			this.didShow();
 		}
 
-		if (this.element.hasClass('hide-animated')) {
+		if (this.hasClass('hide-animated')) {
 			this.element.hide();
-			this.element.removeClass('hide-animated');
+			this.removeClass('hide-animated');
 			this.didHide();
 		}
 	}
@@ -8071,7 +8387,7 @@ Moobile.View = new Class({
 
 		this.parent();
 
-		this.element.addClass('view');
+		this.addClass('view');
 
 		var content = this.getRoleElement('content') /* <0.1-compat> */ || this.getRoleElement('view-content') /* </0.1-compat> */;
 		if (content === null) {
@@ -8125,7 +8441,7 @@ Moobile.View = new Class({
 	 * @since  0.1.0
 	 */
 	enableTouch: function() {
-		this.element.removeClass('disable').addClass('enable');
+		this.removeClass('disable').addClass('enable');
 		return this;
 	},
 
@@ -8135,7 +8451,7 @@ Moobile.View = new Class({
 	 * @since  0.1.0
 	 */
 	disableTouch: function() {
-		this.element.removeClass('enable').addClass('disable');
+		this.removeClass('enable').addClass('disable');
 		return this;
 	},
 
@@ -8199,9 +8515,9 @@ Moobile.View = new Class({
 			return this;
 
 		this.willChangeLayout(layout);
-		if (this._layout) this.element.removeClass('view-layout-' + this._layout);
+		if (this._layout) this.removeClass('view-layout-' + this._layout);
 		this._layout = layout;
-		if (this._layout) this.element.addClass('view-layout-' + this._layout);
+		if (this._layout) this.addClass('view-layout-' + this._layout);
 		this.didChangeLayout(layout);
 
 		return this;
@@ -8323,13 +8639,14 @@ Class.refactor(Moobile.Component, {
 /**
  * @see    http://moobilejs.com/doc/latest/View/View#MoobileViewAt
  * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @edited 0.2.0
  * @since  0.1.0
  */
-Moobile.View.at = function(path) {
+Moobile.View.at = function(path, options, name) {
 
 	var element = Element.at(path);
 	if (element) {
-		return Moobile.Component.create(Moobile.View, element, 'data-view');
+		return Moobile.Component.create(Moobile.View, element, 'data-view', options, name);
 	}
 
 	return null;
@@ -8354,6 +8671,9 @@ Moobile.Component.defineRole('content-wrapper', Moobile.View, {traversable: true
 });
 
 // <0.1-compat>
+/**
+ * @deprecated
+ */
 Moobile.Component.defineRole('view-content', Moobile.View, {traversable: true}, function(element) {
 	console.log('[DEPRECATION NOTICE] The role "view-content" will be removed in 0.4, use the role "content" instead');
 	this.contentElement = element;
@@ -8365,9 +8685,68 @@ Moobile.Component.defineRole('view-content', Moobile.View, {traversable: true}, 
 // Styles
 //------------------------------------------------------------------------------
 
+/* Dark Style - iOS Android */
 Moobile.Component.defineStyle('dark', Moobile.View, {
 	attach: function(element) { element.addClass('style-dark'); },
 	detach: function(element) { element.removeClass('style-dark'); }
+});
+
+/* Light Style - iOS Android */
+Moobile.Component.defineStyle('light', Moobile.View, {
+	attach: function(element) { element.addClass('style-light'); },
+	detach: function(element) { element.removeClass('style-light'); }
+});
+
+
+/*
+---
+
+name: ViewStack
+
+description: Provides a view that handles an infinite number of views arrenged
+             as a stack, one on the top of each others.
+
+license: MIT-style license.
+
+authors:
+	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+
+requires:
+	- View
+
+provides:
+	- ViewStack
+
+...
+*/
+
+/**
+ * @see    http://moobilejs.com/doc/latest/View/ViewStack
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.1.0
+ */
+Moobile.ViewStack = new Class({
+
+	Extends: Moobile.View,
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	willBuild: function() {
+		this.parent();
+		this.addClass('view-stack');
+	}
+
+});
+
+//------------------------------------------------------------------------------
+// Roles
+//------------------------------------------------------------------------------
+
+Moobile.Component.defineRole('view-stack', null, null, function(element) {
+	this.addChildComponent(Moobile.Component.create(Moobile.ViewStack, element, 'data-view-stack'));
 });
 
 
@@ -8459,16 +8838,27 @@ Moobile.ScrollView = new Class({
 	},
 
 	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	_pageOffset: {
+		x: 0,
+		y: 0,
+	},
+
+	/**
 	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#options
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @edited 0.2.0
 	 * @since  0.1.0
 	 */
 	options: {
-		scroller: ['IScroll.Android', 'Native', 'IScroll'],
+		scroller: ['Native', 'IScroll'],
+		scroll: 'vertical',
+		scrollbar: 'vertical',
+		bounce: Browser.Platform.ios,
 		momentum: true,
-		scrollX: false,
-		scrollY: true,
 		snapToPage: false,
 		snapToPageAt: 20,
 		snapToPageSizeX: null,
@@ -8488,7 +8878,7 @@ Moobile.ScrollView = new Class({
 	 */
 	willBuild: function() {
 		this.parent();
-		this.element.addClass('scroll-view');
+		this.addClass('scroll-view');
 	},
 
 	/**
@@ -8501,24 +8891,43 @@ Moobile.ScrollView = new Class({
 
 		this.parent();
 
-		if (this.options.snapToPage) this.options.momentum = false;
+		// <0.1 compat>
+		if ('scrollX' in this.options || 'scrollY' in this.options) {
+			console.log('[DEPRECATION NOTICE] The options "scrollX" and "scrollY" will be removed in 0.4, use the "scroll" option instead');
+			if (this.options.scrollX &&
+				this.options.scrollY) {
+				this.options.scroll = 'both';
+			} else {
+				if (this.options.scrollX) this.options.scroll = 'horizontal';
+				if (this.options.scrollY) this.options.scroll = 'vertical';
+			}
+		}
+		// </0.1 compat>
 
 		var options = {
+			scroll: this.options.scroll,
+			scrollbar: this.options.scrollbar,
+			bounce: this.options.bounce,
 			momentum: this.options.momentum,
-			scrollX: this.options.scrollX,
-			scrollY: this.options.scrollY,
+			snapToPage: this.options.snapToPage,
+			snapToPageAt: this.options.snapToPageAt,
+			snapToPageSizeX: this.options.snapToPageSizeX,
+			snapToPageSizeY: this.options.snapToPageSizeY,
+			snapToPageDuration: this.options.snapToPageDuration,
+			snapToPageDelay: this.options.snapToPageDelay
 		};
-
-		this.contentElement.addEvent('touchcancel', this.bound('_onTouchCancel'));
-		this.contentElement.addEvent('touchstart', this.bound('_onTouchStart'));
-		this.contentElement.addEvent('touchend', this.bound('_onTouchEnd'));
 
 		this._scroller = Moobile.Scroller.create(this.contentElement, this.contentWrapperElement, this.options.scroller, options);
 		this._scroller.addEvent('scroll', this.bound('_onScroll'));
+		this._scroller.addEvent('scrollend', this.bound('_onScrollEnd'));
+		this._scroller.addEvent('scrollstart', this.bound('_onScrollStart'));
+		this._scroller.addEvent('touchcancel', this.bound('_onTouchCancel'));
+		this._scroller.addEvent('touchstart', this.bound('_onTouchStart'));
+		this._scroller.addEvent('touchend', this.bound('_onTouchEnd'));
 
 		var name = this._scroller.getName();
 		if (name) {
-			this.element.addClass(name + '-engine');
+			this.addClass(name + '-engine');
 		}
 	},
 
@@ -8545,10 +8954,12 @@ Moobile.ScrollView = new Class({
 	 * @since  0.1.0
 	 */
 	destroy: function() {
-		this.contentElement.removeEvent('touchcancel', this.bound('_onTouchCancel'));
-		this.contentElement.removeEvent('touchstart', this.bound('_onTouchStart'));
-		this.contentElement.removeEvent('touchend', this.bound('_onTouchEnd'));
 		this._scroller.removeEvent('scroll', this.bound('_onScroll'));
+		this._scroller.removeEvent('scrollend', this.bound('_onScrollEnd'));
+		this._scroller.removeEvent('scrollstart', this.bound('_onScrollStart'));
+		this._scroller.removeEvent('touchcancel', this.bound('_onTouchCancel'));
+		this._scroller.removeEvent('touchstart', this.bound('_onTouchStart'));
+		this._scroller.removeEvent('touchend', this.bound('_onTouchEnd'));
 		this._scroller.destroy();
 		this._scroller = null;
 		this.parent();
@@ -8560,18 +8971,36 @@ Moobile.ScrollView = new Class({
 	 * @since  0.2.0
 	 */
 	setContentSize: function(x, y) {
-		this.contentElement.setStyle('width', x);
-		this.contentElement.setStyle('height', y);
+		if (x >= 0) this.contentElement.setStyle('width', x);
+		if (y >= 0) this.contentElement.setStyle('height', y);
 		return this;
 	},
 
 	/**
 	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#getContentSize
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
+	 * @since  0.2.0
 	 */
 	getContentSize: function() {
 		return this.contentElement.getScrollSize();
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#getContentWrapperSize
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getContentWrapperSize: function() {
+		return this.contentWrapperElement.getSize();
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#getContentScroll
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	getContentScroll: function() {
+		return this._scroller.getScroll();
 	},
 
 	/**
@@ -8580,7 +9009,7 @@ Moobile.ScrollView = new Class({
 	 * @since  0.1.0
 	 */
 	scrollTo: function(x, y, time) {
-		this._scroller.scrollTo(x, y, time);
+		this._scroller.scrollTo(x, y, time || 150);
 		return this;
 	},
 
@@ -8590,7 +9019,7 @@ Moobile.ScrollView = new Class({
 	 * @since  0.1.0
 	 */
 	scrollToElement: function(element, time) {
-		this._scroller.scrollToElement(element, time);
+		this._scroller.scrollToElement(element, time || 150);
 		return this;
 	},
 
@@ -8602,23 +9031,28 @@ Moobile.ScrollView = new Class({
 	 */
 	scrollToPage: function(pageX, pageY, time) {
 
+		time = time || 150;
+
 		pageX = pageX || 0;
 		pageY = pageY || 0;
 
 		if (pageX < 0) pageX = 0;
 		if (pageY < 0) pageY = 0;
 
-		var frame = this.getSize();
-		var total = this.getScrollSize();
+		var frame = this.getContentWrapperSize();
+		var total = this.getContentSize();
+
+		var pageSizeX = this.options.snapToPageSizeX || this.getContentWrapperSize().x;
+		var pageSizeY = this.options.snapToPageSizeY || this.getContentWrapperSize().y;
 
 		var xmax = total.x - frame.x;
 		var ymax = total.y - frame.y;
-		var x = (this.options.snapToPageSizeX || frame.x) * pageX;
-		var y = (this.options.snapToPageSizeY || frame.y) * pageY;
+		var x = pageSizeX * pageX;
+		var y = pageSizeY * pageY;
 		if (x > xmax) x = xmax;
 		if (y > ymax) y = ymax;
 
-		var scroll = this.getScroll();
+		var scroll = this.getContentScroll();
 		if (scroll.x !== x ||
 			scroll.y !== y) {
 			this.scrollTo(x, y, time);
@@ -8626,22 +9060,15 @@ Moobile.ScrollView = new Class({
 
 		if (this._page.x !== pageX ||
 			this._page.y !== pageY) {
-			this.fireEvent('scrolltopage', null, time);
+			this._pageOffset.x = Math.abs(x - pageX * pageSizeX);
+			this._pageOffset.y = Math.abs(y - pageY * pageSizeY);
+			this.fireEvent('scrolltopage', [this._page.x, this._page.y], time);
 		}
 
 		this._page.x = pageX;
 		this._page.y = pageY;
 
 		return this;
-	},
-
-	/**
-	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#getScroll
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	getScroll: function() {
-		return this._scroller.getScroll();
 	},
 
 	/**
@@ -8654,12 +9081,12 @@ Moobile.ScrollView = new Class({
 		var x = 0;
 		var y = 0;
 
-		var pageSizeX = this.options.snapToPageSizeX || this.getSize().x;
-		var pageSizeY = this.options.snapToPageSizeY || this.getSize().y;
+		var pageSizeX = this.options.snapToPageSizeX || this.getContentWrapperSize().x;
+		var pageSizeY = this.options.snapToPageSizeY || this.getContentWrapperSize().y;
 
 		if (pageSizeX && pageSizeY) {
 
-			var scroll = this.getScroll();
+			var scroll = this.getContentScroll();
 			scroll.x = scroll.x > 0 ? scroll.x : 0;
 			scroll.y = scroll.y > 0 ? scroll.y : 0;
 
@@ -8671,12 +9098,12 @@ Moobile.ScrollView = new Class({
 	},
 
 	/**
-	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#getScrollSize
+	 * @see    http://moobilejs.com/doc/latest/View/ScrollView#getPageOffset
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
+	 * @since  0.2.0
 	 */
-	getScrollSize: function() {
-		return this._scroller.getScrollSize();
+	getPageOffset: function() {
+		return this._pageOffset;
 	},
 
 	/**
@@ -8716,7 +9143,7 @@ Moobile.ScrollView = new Class({
 	 */
 	_snapToPage: function() {
 
-		var scroll = this.getScroll();
+		var scroll = this.getContentScroll();
 		scroll.x = scroll.x > 0 ? scroll.x : 0;
 		scroll.y = scroll.y > 0 ? scroll.y : 0;
 
@@ -8728,33 +9155,25 @@ Moobile.ScrollView = new Class({
 		if (moveX === 0 && moveY === 0)
 			return this;
 
-		var pageSizeX = this.options.snapToPageSizeX || this.getSize().x;
-		var pageSizeY = this.options.snapToPageSizeY || this.getSize().y;
-		var pageMoveX = Math.floor(absMoveX / pageSizeX);
-		var pageMoveY = Math.floor(absMoveY / pageSizeY);
-		var pageAreaX = (absMoveX - pageMoveX * pageSizeX) * 100 / pageSizeX;
-		var pageAreaY = (absMoveY - pageMoveY * pageSizeY) * 100 / pageSizeY;
-
-		var page = this.getPage();
-		if (moveX < 0) page.x = page.x + 1;
-		if (moveY < 0) page.y = page.y + 1;
-
-		var frame = this.getSize();
-		var total = this.getScrollSize();
-
-		if (scroll.x + frame.x === total.x ||
-			scroll.y + frame.y === total.y) {
-			// handles uneven pages
-			if ((scroll.x / pageSizeX - page.x) * 100 > 0) page.x = page.x + 1;
-			if ((scroll.y / pageSizeY - page.y) * 100 > 0) page.y = page.y + 1;
-		}
+		var scrollX = this.options.scroll === 'both' || this.options.scroll === 'horizontal';
+		var scrollY = this.options.scroll === 'both' || this.options.scroll === 'vertical';
 
 		var snapToPageAt = this.options.snapToPageAt;
 		var snapToPageDelay = this.options.snapToPageDelay;
 		var snapToPageDuration = this.options.snapToPageDuration
 
-		if (pageAreaX > snapToPageAt || this._activeTouchDuration < snapToPageDelay) page.x += moveX > 0 ? 1 : -1;
-		if (pageAreaY > snapToPageAt || this._activeTouchDuration < snapToPageDelay) page.y += moveY > 0 ? 1 : -1;
+		var pageSizeX = this.options.snapToPageSizeX || this.getContentWrapperSize().x;
+		var pageSizeY = this.options.snapToPageSizeY || this.getContentWrapperSize().y;
+		var pageMoveX = (absMoveX - Math.floor(absMoveX / pageSizeX) * pageSizeX) * 100 / pageSizeX;
+		var pageMoveY = (absMoveY - Math.floor(absMoveY / pageSizeY) * pageSizeY) * 100 / pageSizeY;
+
+		var page = this.getPage();
+
+		if (moveX < 0 || this._pageOffset.x > 0) page.x += 1;
+		if (moveY < 0 || this._pageOffset.y > 0) page.y += 1;
+
+		if (absMoveX >= 10 && (pageMoveX >= snapToPageAt || this._activeTouchDuration < snapToPageDelay)) page.x += moveX > 0 ? 1 : -1;
+		if (absMoveY >= 10 && (pageMoveY >= snapToPageAt || this._activeTouchDuration < snapToPageDelay)) page.y += moveY > 0 ? 1 : -1;
 
 		this.scrollToPage(page.x, page.y, this.options.snapToPageDuration);
 
@@ -8785,7 +9204,7 @@ Moobile.ScrollView = new Class({
 		if (this._activeTouch === null) {
 			this._activeTouch = touch;
 			this._activeTouchTime = Date.now();
-			this._activeTouchStartScroll = this.getScroll();
+			this._activeTouchStartScroll = this.getContentScroll();
 		}
 	},
 
@@ -8822,9 +9241,62 @@ Moobile.ScrollView = new Class({
 	 */
 	_onScroll: function() {
 		this.fireEvent('scroll');
-	}
+	},
+
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	_onScrollStart: function() {
+		this.fireEvent('scrollstart');
+	},
+
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	_onScrollEnd: function() {
+		this.fireEvent('scrollend');
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getScrollSize: function() {
+		console.log('[DEPRECATION NOTICE] The method "getScrollSize" will be removed in 0.3, use the method "getContentSize" instead');
+		return this.getContentSize();
+	},
+
+	/**
+	 * @deprecated
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
+	getScroll: function() {
+		console.log('[DEPRECATION NOTICE] The method "getScroll" will be removed in 0.3, use the method "getContentScroll" instead');
+		return this.getContentScroll();
+	},
 
 });
+
+/**
+ * @see    http://moobilejs.com/doc/latest/View/View#MoobileViewAt
+ * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+ * @since  0.2.0
+ */
+Moobile.ScrollView.at = function(path, options, name) {
+
+	var element = Element.at(path);
+	if (element) {
+		return Moobile.Component.create(Moobile.ScrollView, element, 'data-view', options, name);
+	}
+
+	return null;
+};
 
 //------------------------------------------------------------------------------
 // Roles
@@ -8832,58 +9304,6 @@ Moobile.ScrollView = new Class({
 
 Moobile.Component.defineRole('scroll-view', null, function(element) {
 	this.addChildComponent(Moobile.Component.create(Moobile.ScrollView, element, 'data-scroll-view'));
-});
-
-
-/*
----
-
-name: ViewStack
-
-description: Provides a view that handles an infinite number of views arrenged
-             as a stack, one on the top of each others.
-
-license: MIT-style license.
-
-authors:
-	- Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-
-requires:
-	- View
-
-provides:
-	- ViewStack
-
-...
-*/
-
-/**
- * @see    http://moobilejs.com/doc/latest/View/ViewStack
- * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
- * @since  0.1.0
- */
-Moobile.ViewStack = new Class({
-
-	Extends: Moobile.View,
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	willBuild: function() {
-		this.parent();
-		this.element.addClass('view-stack');
-	}
-
-});
-
-//------------------------------------------------------------------------------
-// Roles
-//------------------------------------------------------------------------------
-
-Moobile.Component.defineRole('view-stack', null, null, function(element) {
-	this.addChildComponent(Moobile.Component.create(Moobile.ViewStack, element, 'data-view-stack'));
 });
 
 
@@ -9014,7 +9434,7 @@ Moobile.ViewController = new Class({
 			this.viewDidLoad();
 		}
 
-		window.addEvent('rotate', this.bound('_onWindowRotate'));
+		window.addEvent('orientationchange', this.bound('_onWindowOrientationChange'));
 
 		return this;
 	},
@@ -9028,6 +9448,26 @@ Moobile.ViewController = new Class({
 		if (this.view === null) {
 			this.view = new Moobile.View();
 		}
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewController#showView
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.3.0
+	 */
+	showView: function() {
+		this.view.show();
+		return this;
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewController#hideView
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.3.0
+	 */
+	hideView: function() {
+		this.view.hide();
+		return this;
 	},
 
 	/**
@@ -9601,15 +10041,6 @@ Moobile.ViewController = new Class({
 	},
 
 	/**
-	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewController#didRotate
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.1.0
-	 */
-	didRotate: function(orientation) {
-
-	},
-
-	/**
 	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewController#viewDidLoad
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1.0
@@ -9664,13 +10095,22 @@ Moobile.ViewController = new Class({
 	},
 
 	/**
+	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewController#viewDidRotate
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	viewDidRotate: function(orientation) {
+
+	},
+
+	/**
 	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewController#destroy
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1.0
 	 */
 	destroy: function() {
 
-		window.removeEvent('rotate', this.bound('_onWindowRotate'));
+		window.removeEvent('orientationchange', this.bound('_onWindowOrientationChange'));
 
 		this.removeAllChildViewControllers(true);
 
@@ -9699,15 +10139,35 @@ Moobile.ViewController = new Class({
 		this._viewTransition = null;
 	},
 
-	_onWindowRotate: function(e) {
-		this.didRotate(window.orientationName);
-	},
-
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.1.0
+	 */
 	_onViewReady: function() {
 		if (this._viewReady === false) {
 			this._viewReady = true;
 			this.viewDidBecomeReady();
 		}
+	},
+
+	/**
+	 * @hidden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	_onWindowOrientationChange: function(e) {
+
+		var name = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
+
+		// <0.1-compat>
+		if (this.didRotate) {
+			this.didRotate(name);
+			console.log('[DEPRECATION NOTICE] The method "didRotate" will be removed in 0.4, use the method "viewDidRotate" instead');
+		}
+		// </0.1-compat>
+
+		this.viewDidRotate(name);
 	}
 
 });
@@ -9760,26 +10220,6 @@ Moobile.ViewControllerStack = new Class({
 	},
 
 	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	viewDidLoad: function() {
-		this.parent();
-		window.addEventListener('hashchange', this.bound('_onHashChange'));
-	},
-
-	/**
-	 * @overridden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	destroy: function() {
-		window.removeEventListener('hashchange', this.bound('_onHashChange'));
-		this.parent();
-	},
-
-	/**
 	 * @see    http://moobilejs.com/doc/latest/ViewController/ViewControllerStack#pushViewController
 	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
 	 * @since  0.1.0
@@ -9820,8 +10260,6 @@ Moobile.ViewControllerStack = new Class({
 		);
 
 		viewControllerPushed.setViewTransition(viewTransition);
-
-		this._setLocationHash(viewControllerPushed.getId());
 
 		return this;
 	},
@@ -9893,8 +10331,6 @@ Moobile.ViewControllerStack = new Class({
 			viewControllerPopped.getView(),
 			this.view
 		);
-
-		this._setLocationHash(viewControllerBefore.getId());
 
 		return this;
 	},
@@ -10028,59 +10464,6 @@ Moobile.ViewControllerStack = new Class({
 	 */
 	didPopViewController: function(viewController) {
 
-	},
-
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	_setLocationHash: function(value) {
-		(function() {
-			window.location.hash = '#' + value;
-		}).delay(50);
-		return this;
-	},
-
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	_getLocationHash: function() {
-		return window.location.hash.substring(1);
-	},
-
-	/**
-	 * @hidden
-	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
-	 * @since  0.2.0
-	 */
-	_onHashChange: function() {
-
-		var hash = this._getLocationHash();
-		if (hash) {
-
-
-			var vc = this.getChildViewControllers().find(function(vc) {
-				return vc.getId() === hash;
-			});
-
-			console.log('Hash Changed to ' + hash + ' vc at ' + this.getChildViewControllerIndex(vc));
-
-
-			if (this.getTopViewController().getId() === hash)
-				return;
-
-			var viewControllers = this.getChildViewControllers();
-			for (var i = 0; i < viewControllers.length; i++) {
-				var viewController = viewControllers[i];
-				if (viewController.getId() === hash) {
-					this.popViewControllerUntil(viewController);
-					break;
-				}
-			}
-		}
 	}
 
 });
@@ -10390,7 +10773,7 @@ Moobile.ViewTransition = new Class({
 	 * @since  0.1.0
 	 */
 	didEnter: function(viewToShow, viewToHide, parentView) {
-		viewToHide.hide();
+		if (this.shouldHideViewToHideOnEnter(viewToShow, viewToHide, parentView)) viewToHide.hide();
 		viewToHide.enableTouch();
 		viewToShow.enableTouch();
 		this.fireEvent('complete');
@@ -10403,11 +10786,29 @@ Moobile.ViewTransition = new Class({
 	 * @since  0.1.0
 	 */
 	didLeave: function(viewToShow, viewToHide, parentView) {
-		viewToHide.hide();
+		if (this.shouldHideViewToHideOnEnter(viewToShow, viewToHide, parentView)) viewToHide.hide();
 		viewToHide.enableTouch();
 		viewToShow.enableTouch();
 		this.fireEvent('complete');
 		return this;
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/ViewTransition/ViewTransition#shouldHideViewToHideOnEnter
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	shouldHideViewToHideOnEnter: function(viewToShow, viewToHide, parentView) {
+		return true;
+	},
+
+	/**
+	 * @see    http://moobilejs.com/doc/latest/ViewTransition/ViewTransition#shouldHideViewToHideOnLeave
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	shouldHideViewToHideOnLeave: function(viewToShow, viewToHide, parentView) {
+		return true;
 	},
 
 	/**
@@ -10621,13 +11022,11 @@ Moobile.ViewTransition.Cover = new Class({
 		var parentElem = parentView.getContentElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-cover-perspective');
 			parentElem.addClass('transition-cover-enter');
 			viewToHide.addClass('transition-view-to-hide');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-cover-perspective');
 			parentElem.removeClass('transition-cover-enter');
 			viewToHide.removeClass('transition-view-to-hide');
 			this.didEnter(viewToShow, viewToHide, parentView);
@@ -10798,6 +11197,15 @@ Moobile.ViewTransition.Cover.Box = new Class({
 		animation.addEvent('start', onStart);
 		animation.addEvent('end', onEnd);
 		animation.start();
+	},
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	shouldHideViewToHideOnEnter: function(viewToShow, viewToHide, parentView) {
+		return false;
 	}
 
 });
@@ -10931,6 +11339,15 @@ Moobile.ViewTransition.Cover.Page = new Class({
 		animation.addEvent('start', onStart);
 		animation.addEvent('end', onEnd);
 		animation.start();
+	},
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	shouldHideViewToHideOnEnter: function(viewToShow, viewToHide, parentView) {
+		return false;
 	}
 
 });
@@ -10974,15 +11391,16 @@ Moobile.ViewTransition.Cubic = new Class({
 	firstAnimation: function(viewToShow, parentView) {
 
 		var parentElem = parentView.getContentElement();
+		var parentWrap = parentView.getContentWrapperElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-cubic-perspective');
+			parentWrap.addClass('transition-cubic-perspective');
 			parentElem.addClass('first');
 			viewToShow.addClass('transition-view-to-show');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-cubic-perspective');
+			parentWrap.removeClass('transition-cubic-perspective');
 			parentElem.removeClass('first');
 			viewToShow.removeClass('transition-view-to-show');
 			this.didEnterFirst(viewToShow, parentView);
@@ -11003,15 +11421,16 @@ Moobile.ViewTransition.Cubic = new Class({
 	enterAnimation: function(viewToShow, viewToHide, parentView) {
 
 		var parentElem = parentView.getContentElement();
+		var parentWrap = parentView.getContentWrapperElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-cubic-perspective');
+			parentWrap.addClass('transition-cubic-perspective');
 			viewToHide.addClass('transition-view-to-hide');
 			viewToShow.addClass('transition-view-to-show');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-cubic-perspective');
+			parentWrap.removeClass('transition-cubic-perspective');
 			viewToHide.removeClass('transition-view-to-hide');
 			viewToShow.removeClass('transition-view-to-show');
 			this.didEnter(viewToShow, viewToHide, parentView);
@@ -11032,15 +11451,16 @@ Moobile.ViewTransition.Cubic = new Class({
 	leaveAnimation: function(viewToShow, viewToHide, parentView) {
 
 		var parentElem = parentView.getContentElement();
+		var parentWrap = parentView.getContentWrapperElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-cubic-perspective');
+			parentWrap.addClass('transition-cubic-perspective');
 			viewToHide.addClass('transition-view-to-hide');
 			viewToShow.addClass('transition-view-to-show');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-cubic-perspective');
+			parentWrap.removeClass('transition-cubic-perspective');
 			viewToHide.removeClass('transition-view-to-hide');
 			viewToShow.removeClass('transition-view-to-show');
 			this.didLeave(viewToShow, viewToHide, parentView);
@@ -11210,15 +11630,16 @@ Moobile.ViewTransition.Flip = new Class({
 	firstAnimation: function(viewToShow, parentView) {
 
 		var parentElem = parentView.getContentElement();
+		var parentWrap = parentView.getContentWrapperElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-flip-perspective');
+			parentWrap.addClass('transition-flip-perspective');
 			parentElem.addClass('first');
 			viewToShow.addClass('transition-view-to-show');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-flip-perspective');
+			parentWrap.removeClass('transition-flip-perspective');
 			parentElem.removeClass('first');
 			viewToShow.removeClass('transition-view-to-show');
 			this.didEnterFirst(viewToShow, parentView);
@@ -11239,15 +11660,16 @@ Moobile.ViewTransition.Flip = new Class({
 	enterAnimation: function(viewToShow, viewToHide, parentView) {
 
 		var parentElem = parentView.getContentElement();
+		var parentWrap = parentView.getContentWrapperElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-flip-perspective');
+			parentWrap.addClass('transition-flip-perspective');
 			viewToHide.addClass('transition-view-to-hide');
 			viewToShow.addClass('transition-view-to-show');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-flip-perspective');
+			parentWrap.removeClass('transition-flip-perspective');
 			viewToHide.removeClass('transition-view-to-hide');
 			viewToShow.removeClass('transition-view-to-show');
 			this.didEnter(viewToShow, viewToHide, parentView);
@@ -11268,15 +11690,16 @@ Moobile.ViewTransition.Flip = new Class({
 	leaveAnimation: function(viewToShow, viewToHide, parentView) {
 
 		var parentElem = parentView.getContentElement();
+		var parentWrap = parentView.getContentWrapperElement();
 
 		var onStart = function() {
-			parentView.addClass('transition-flip-perspective');
+			parentWrap.addClass('transition-flip-perspective');
 			viewToHide.addClass('transition-view-to-hide');
 			viewToShow.addClass('transition-view-to-show');
 		}.bind(this);
 
 		var onEnd = function() {
-			parentView.removeClass('transition-flip-perspective');
+			parentWrap.removeClass('transition-flip-perspective');
 			viewToHide.removeClass('transition-view-to-hide');
 			viewToShow.removeClass('transition-view-to-show');
 			this.didLeave(viewToShow, viewToHide, parentView);
@@ -11376,6 +11799,10 @@ provides:
 
 if (!window.$moobile) window.$moobile = {};
 
+(function() {
+
+var instance = null;
+
 /**
  * @see    http://moobilejs.com/doc/latest/Window/Window
  * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
@@ -11384,6 +11811,16 @@ if (!window.$moobile) window.$moobile = {};
 Moobile.Window = new Class({
 
 	Extends: Moobile.View,
+
+	/**
+	 * @overridden
+	 * @author Jean-Philippe Dery (jeanphilippe.dery@gmail.com)
+	 * @since  0.2.0
+	 */
+	initialize: function(element, options, name) {
+		instance = this;
+		return this.parent(element, options, name);
+	},
 
 	/**
 	 * @overridden
@@ -11458,6 +11895,12 @@ Moobile.Window = new Class({
 	}
 
 });
+
+Moobile.Window.getCurrentInstance = function() {
+	return instance;
+};
+
+})()
 
 
 /*
